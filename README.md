@@ -22,8 +22,8 @@ This project is developed as a Final Year BCA Project, focusing on real-world pr
 
 # 💻 Tech Stack
 Frontend
-- HTML5, CSS3, JavaScript
 - React.js
+- JavaScript
 - Tailwind CSS
   
 Backend
