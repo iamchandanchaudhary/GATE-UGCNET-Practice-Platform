@@ -1,11 +1,19 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import HomePage from './Pages/HomePage';
 
 function App() {
   return (
-    <div>
-      <h1 className='bg-green-500'>Frontend</h1>
-    </div>
-  )
+    <Router>
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
