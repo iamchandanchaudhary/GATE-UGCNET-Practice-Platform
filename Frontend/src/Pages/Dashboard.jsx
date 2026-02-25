@@ -15,18 +15,18 @@ import Sidebar from '../components/Sidebar';
 
 // Sample chart data
 const progressData = [
-  { date: '2023-01-01', score: 32 },
-  { date: '2022-07-02', score: 45 },
-  { date: '2022-07-03', score: 60 },
-  { date: '2022-01-04', score: 79 },
-  { date: '2022-01-04', score: 74 },
-  { date: '2022-07-05', score: 80 },
-  { date: '2022-07-05', score: 80 },
-  { date: '2022-01-06', score: 65 },
-  { date: '2022-01-07', score: 78 },
-  { date: '2022-07-17', score: 80 },
-  { date: '2022-07-18', score: 80 },
-  { date: '2023-01-16', score: 87 },
+  { date: '2026-01-04', score: 32 },
+  { date: '2026-01-10', score: 45 },
+  { date: '2026-01-12', score: 60 },
+  { date: '2026-01-18', score: 79 },
+  { date: '2026-01-24', score: 74 },
+  { date: '2026-01-28', score: 80 },
+  { date: '2026-02-09', score: 80 },
+  { date: '2026-02-14', score: 65 },
+  { date: '2026-02-18', score: 78 },
+  { date: '2026-02-20', score: 80 },
+  { date: '2026-02-21', score: 80 },
+  { date: '2026-02-26', score: 87 },
 ];
 
 // Sample recent activity
@@ -70,7 +70,7 @@ function Dashboard() {
               <XAxis
                 dataKey="date"
                 tick={{ fontSize: 12 }}
-                angle={-45}
+                angle={0}
                 textAnchor="end"
                 height={70}
               />

@@ -4,6 +4,10 @@ import Navbar from './components/Navbar';
 import HomePage from './Pages/HomePage';
 import Dashboard from './Pages/Dashboard';
 import LoginPage from './Pages/LoginPage';
+import SignupPage from './Pages/SignupPage';
+import MyTestsPage from './Pages/MyTestsPage';
+import ReportsPage from './Pages/ReportsPage';
+import ProfilePage from './Pages/ProfilePage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Protected route wrapper
@@ -20,11 +24,36 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-tests"
+          element={
+            <ProtectedRoute>
+              <MyTestsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <ReportsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
