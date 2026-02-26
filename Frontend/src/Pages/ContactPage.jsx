@@ -18,13 +18,13 @@ const contactInfo = [
   {
     icon: HiOutlinePhone,
     title: 'Call Us',
-    detail: '+91 98765 43210',
+    detail: '+91 0000000000',
     subtext: 'Mon–Sat, 9 AM – 6 PM IST',
   },
   {
     icon: HiOutlineLocationMarker,
     title: 'Office',
-    detail: 'Bangalore, Karnataka',
+    detail: 'Lucknow, Uttar Pradesh',
     subtext: 'India',
   },
   {
@@ -143,7 +143,7 @@ const ContactPage = () => {
                       <input
                         type="text"
                         name="name"
-                        placeholder="John Doe"
+                        placeholder="Your name"
                         value={form.name}
                         onChange={handleChange}
                         required

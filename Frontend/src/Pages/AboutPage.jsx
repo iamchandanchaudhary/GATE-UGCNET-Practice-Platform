@@ -12,9 +12,9 @@ import {
 } from 'react-icons/hi';
 
 const stats = [
-  { value: '10,000+', label: 'Practice Questions' },
-  { value: '500+', label: 'Mock Tests' },
-  { value: '50,000+', label: 'Active Learners' },
+  { value: '2', label: 'Practice Questions' },
+  { value: '4', label: 'Mock Tests' },
+  { value: '10', label: 'Active Learners' },
   { value: '95%', label: 'Satisfaction Rate' },
 ];
 
@@ -185,7 +185,7 @@ const AboutPage = () => {
       </section>
 
       {/* Team Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      {/* <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
         <div className="text-center mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-[#3475d9] bg-blue-50 px-3 py-1 rounded-full">
             Our Team
@@ -212,7 +212,7 @@ const AboutPage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-[#3475d9] to-blue-700 py-16">

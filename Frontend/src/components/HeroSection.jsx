@@ -26,10 +26,10 @@ const HeroSection = () => {
                 Start Practicing
               </Link>
               <Link
-                to="/services"
+                to="/learning"
                 className="px-8 py-3 text-base font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:text-[#3475d9] transition-colors duration-200"
               >
-                Explore Services
+                Start Learning
               </Link>
             </div>
           </div>
