@@ -75,7 +75,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/test"
+          path="/test/:testId"
           element={
             <ProtectedRoute>
               <TestPage />

@@ -24,9 +24,11 @@ function TestReportPage() {
 
   if (!result) return null;
 
-  const percentage = Math.round((result.correct / result.total) * 100);
+  const total = result.totalQuestions || result.total;
+  const percentage = result.score;
   const timeTakenMin = Math.floor(result.timeTaken / 60);
   const timeTakenSec = result.timeTaken % 60;
+  const questions = result.questions || result.details || [];
 
   let gradeColor = 'text-red-600';
   let gradeBg = 'bg-red-50';
@@ -54,7 +56,7 @@ function TestReportPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Test Report</h1>
             <p className="text-gray-500 mt-1">
-              GATE CS 2026 — Practice Test Results
+              {result.testName || 'Practice Test'} — Results
             </p>
           </div>
           <div className="flex gap-3">
@@ -70,7 +72,7 @@ function TestReportPage() {
               className="flex items-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors"
             >
               <HiOutlineRefresh />
-              Retake Test
+              Take Another Test
             </Link>
           </div>
         </div>
@@ -82,7 +84,7 @@ function TestReportPage() {
             <p className={`text-5xl font-extrabold ${gradeColor}`}>{percentage}%</p>
             <p className={`text-sm font-semibold mt-2 ${gradeColor}`}>{gradeLabel}</p>
             <p className="text-xs text-gray-500 mt-1">
-              {result.score} / {result.maxScore} marks
+              {result.correct} / {total} correct
             </p>
           </div>
 
@@ -127,7 +129,7 @@ function TestReportPage() {
             <p className="text-lg font-bold text-gray-800">
               {timeTakenMin}m {timeTakenSec}s
             </p>
-            <p className="text-sm text-gray-500">Time Taken (of 20 min)</p>
+            <p className="text-sm text-gray-500">Time Taken</p>
           </div>
         </div>
 
@@ -139,11 +141,14 @@ function TestReportPage() {
             </h2>
           </div>
           <div className="divide-y divide-gray-100">
-            {result.details.map((q, idx) => {
+            {questions.map((q, idx) => {
+              const correctAnswer = q.correctAnswer !== undefined ? q.correctAnswer : q.answer;
+              const userAnswer = q.userAnswer !== undefined ? q.userAnswer : q.selected;
               const isCorrect = q.isCorrect;
-              const wasAnswered = q.selected !== null;
+              const wasAnswered = userAnswer !== null;
+
               return (
-                <div key={q.id} className="px-6 py-5">
+                <div key={q.id || idx} className="px-6 py-5">
                   <div className="flex items-start gap-3 mb-3">
                     <span
                       className={`mt-1 shrink-0 ${
@@ -175,9 +180,9 @@ function TestReportPage() {
                   <div className="ml-8 grid grid-cols-1 md:grid-cols-2 gap-2">
                     {q.options.map((opt, oi) => {
                       let optClass = 'border-gray-200 text-gray-600';
-                      if (oi === q.answer) {
+                      if (oi === correctAnswer) {
                         optClass = 'border-green-400 bg-green-50 text-green-700';
-                      } else if (oi === q.selected && !q.isCorrect) {
+                      } else if (oi === userAnswer && !isCorrect) {
                         optClass = 'border-red-400 bg-red-50 text-red-700';
                       }
                       return (
@@ -189,14 +194,14 @@ function TestReportPage() {
                             {String.fromCharCode(65 + oi)}.
                           </span>
                           {opt}
-                          {oi === q.answer && (
+                          {oi === correctAnswer && (
                             <span className="ml-2 text-xs font-bold text-green-600">
-                              ✓ Correct
+                              Correct
                             </span>
                           )}
-                          {oi === q.selected && oi !== q.answer && (
+                          {oi === userAnswer && oi !== correctAnswer && (
                             <span className="ml-2 text-xs font-bold text-red-600">
-                              ✗ Your Answer
+                              Your Answer
                             </span>
                           )}
                         </div>

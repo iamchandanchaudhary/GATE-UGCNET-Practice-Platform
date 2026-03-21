@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   HiOutlineClock,
   HiOutlineChevronLeft,
@@ -8,148 +8,98 @@ import {
   HiX,
 } from 'react-icons/hi';
 
-// ── 10 GATE CS MCQ Questions ──
-const questions = [
-  {
-    id: 1,
-    question:
-      'What is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?',
-    options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'],
-    answer: 1,
-  },
-  {
-    id: 2,
-    question:
-      'Which of the following sorting algorithms has the best average-case time complexity?',
-    options: ['Bubble Sort', 'Selection Sort', 'Merge Sort', 'Insertion Sort'],
-    answer: 2,
-  },
-  {
-    id: 3,
-    question:
-      'In the context of operating systems, what does a "deadlock" refer to?',
-    options: [
-      'A situation where a process is terminated unexpectedly',
-      'A situation where two or more processes are waiting indefinitely for resources held by each other',
-      'A situation where the CPU utilization is 100%',
-      'A situation where the memory is completely full',
-    ],
-    answer: 1,
-  },
-  {
-    id: 4,
-    question:
-      'Which of the following is NOT a valid page replacement algorithm?',
-    options: ['FIFO', 'LRU', 'Optimal', 'LIFO'],
-    answer: 3,
-  },
-  {
-    id: 5,
-    question:
-      'What is the worst-case time complexity of QuickSort?',
-    options: ['O(n log n)', 'O(n²)', 'O(n)', 'O(log n)'],
-    answer: 1,
-  },
-  {
-    id: 6,
-    question:
-      'Which data structure is used for implementing a priority queue efficiently?',
-    options: ['Stack', 'Queue', 'Heap', 'Linked List'],
-    answer: 2,
-  },
-  {
-    id: 7,
-    question:
-      'In a relational database, a "foreign key" is used to:',
-    options: [
-      'Uniquely identify each record in a table',
-      'Establish a link between data in two tables',
-      'Index the table for faster queries',
-      'Encrypt sensitive data in a table',
-    ],
-    answer: 1,
-  },
-  {
-    id: 8,
-    question:
-      'Which of the following is true about TCP (Transmission Control Protocol)?',
-    options: [
-      'It is connectionless',
-      'It does not guarantee delivery of packets',
-      'It provides reliable, ordered delivery of data',
-      'It is faster than UDP in all cases',
-    ],
-    answer: 2,
-  },
-  {
-    id: 9,
-    question:
-      'The number of edges in a complete graph with n vertices is:',
-    options: ['n', 'n(n-1)', 'n(n-1)/2', '2n'],
-    answer: 2,
-  },
-  {
-    id: 10,
-    question:
-      'Which normal form eliminates transitive dependency?',
-    options: ['1NF', '2NF', '3NF', 'BCNF'],
-    answer: 2,
-  },
-];
-
-const TOTAL_TIME = 20 * 60; // 20 minutes in seconds
-
 function TestPage() {
   const navigate = useNavigate();
+  const { testId } = useParams();
+
+  const [test, setTest] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   const [currentQ, setCurrentQ] = useState(0);
-  const [selected, setSelected] = useState(Array(questions.length).fill(null));
-  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+  const [selected, setSelected] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFinish = useCallback(() => {
-    // Calculate results
-    let correct = 0;
-    let wrong = 0;
-    let unanswered = 0;
-    const details = questions.map((q, i) => {
-      const sel = selected[i];
-      if (sel === null) {
-        unanswered++;
-        return { ...q, selected: null, isCorrect: false };
+  useEffect(() => {
+    fetchTest();
+  }, [testId]);
+
+  const fetchTest = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tests/public/${testId}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        setTest(data.test);
+        setQuestions(data.test.questions);
+        setSelected(Array(data.test.questions.length).fill(null));
+        const duration = data.test.duration * 60;
+        setTimeLeft(duration);
+        setTotalTime(duration);
+      } else {
+        setError(data.message || 'Failed to load test');
       }
-      if (sel === q.answer) {
-        correct++;
-        return { ...q, selected: sel, isCorrect: true };
+    } catch (error) {
+      console.error('Fetch test error:', error);
+      setError('Connection error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFinish = useCallback(async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tests/public/${testId}/submit`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            answers: selected,
+            timeTaken: totalTime - timeLeft,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        sessionStorage.setItem('testResult', JSON.stringify(data.result));
+        navigate('/test-report', { replace: true });
+      } else {
+        setError(data.message || 'Failed to submit test');
+        setIsSubmitting(false);
       }
-      wrong++;
-      return { ...q, selected: sel, isCorrect: false };
-    });
-
-    const result = {
-      total: questions.length,
-      correct,
-      wrong,
-      unanswered,
-      score: correct * 10,
-      maxScore: questions.length * 10,
-      timeTaken: TOTAL_TIME - timeLeft,
-      details,
-    };
-
-    // Store result and navigate
-    sessionStorage.setItem('testResult', JSON.stringify(result));
-    navigate('/test-report', { replace: true });
-  }, [selected, timeLeft, navigate]);
+    } catch (error) {
+      console.error('Submit test error:', error);
+      setError('Connection error. Please try again.');
+      setIsSubmitting(false);
+    }
+  }, [selected, timeLeft, totalTime, testId, navigate, isSubmitting]);
 
   // Timer
   useEffect(() => {
-    if (timeLeft <= 0) {
+    if (loading || timeLeft <= 0) return;
+
+    if (timeLeft === 1) {
       handleFinish();
       return;
     }
+
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, handleFinish]);
+  }, [timeLeft, loading, handleFinish]);
 
   const formatTime = (s) => {
     const m = Math.floor(s / 60);
@@ -163,8 +113,34 @@ function TestPage() {
     setSelected(copy);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-gray-600 text-xl">Loading test...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center max-w-md">
+          <HiOutlineExclamationCircle className="text-5xl text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Error</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => navigate('/start-test')}
+            className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const answeredCount = selected.filter((s) => s !== null).length;
-  const isLowTime = timeLeft <= 120; // less than 2 min
+  const isLowTime = timeLeft <= 120;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -172,7 +148,7 @@ function TestPage() {
       <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
         <div>
           <h1 className="text-lg font-bold text-gray-800">
-            GATE CS 2026 — Practice Test
+            {test?.name || 'Practice Test'}
           </h1>
           <p className="text-xs text-gray-500">
             Question {currentQ + 1} of {questions.length}
@@ -192,9 +168,10 @@ function TestPage() {
           </div>
           <button
             onClick={() => setShowSubmitConfirm(true)}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400"
           >
-            Submit Test
+            {isSubmitting ? 'Submitting...' : 'Submit Test'}
           </button>
         </div>
       </header>
@@ -248,13 +225,13 @@ function TestPage() {
                   Question {currentQ + 1}
                 </span>
                 <h2 className="text-lg font-semibold text-gray-800 mt-3 leading-relaxed">
-                  {questions[currentQ].question}
+                  {questions[currentQ]?.question}
                 </h2>
               </div>
 
               {/* Options */}
               <div className="space-y-3">
-                {questions[currentQ].options.map((option, idx) => (
+                {questions[currentQ]?.options.map((option, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSelect(idx)}
@@ -308,7 +285,8 @@ function TestPage() {
               ) : (
                 <button
                   onClick={() => setShowSubmitConfirm(true)}
-                  className="flex items-center gap-1 px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors cursor-pointer"
+                  disabled={isSubmitting}
+                  className="flex items-center gap-1 px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors cursor-pointer disabled:bg-green-400"
                 >
                   Submit Test
                 </button>
@@ -360,9 +338,10 @@ function TestPage() {
               </button>
               <button
                 onClick={handleFinish}
-                className="px-5 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer"
+                disabled={isSubmitting}
+                className="px-5 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer disabled:bg-green-400"
               >
-                Yes, Submit
+                {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
               </button>
             </div>
           </div>
