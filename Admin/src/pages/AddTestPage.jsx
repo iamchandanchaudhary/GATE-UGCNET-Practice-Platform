@@ -149,19 +149,20 @@ const AddTestPage = () => {
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <Link
-            to="/dashboard"
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition"
-          >
-            <FaArrowLeft />
-            Back
-          </Link>
           <h1 className="text-2xl font-bold text-white">Add New Test</h1>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-8">
+      <main className="max-w-4xl mx-auto px-6 py-6">
+        <Link
+          to="/dashboard"
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition mb-4"
+        >
+          <FaArrowLeft />
+          Back to Dashboard
+        </Link>
+
         {error && (
           <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
             {error}

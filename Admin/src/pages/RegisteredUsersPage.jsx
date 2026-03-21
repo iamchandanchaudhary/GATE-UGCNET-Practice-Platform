@@ -141,13 +141,6 @@ const RegisteredUsersPage = () => {
       <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition"
-            >
-              <FaArrowLeft />
-              Back
-            </Link>
             <h1 className="text-2xl font-bold text-white">Registered Users</h1>
           </div>
           <div className="text-gray-400">
@@ -157,7 +150,15 @@ const RegisteredUsersPage = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-6">
+        <Link
+          to="/dashboard"
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition mb-4"
+        >
+          <FaArrowLeft />
+          Back to Dashboard
+        </Link>
+
         {error && (
           <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
             {error}
@@ -373,15 +374,14 @@ const RegisteredUsersPage = () => {
                           <div className="flex items-center justify-between mb-3">
                             <h4 className="text-white font-medium">{result.testName}</h4>
                             <span
-                              className={`px-3 py-1 rounded-full text-sm font-bold ${
-                                result.score >= 80
+                              className={`px-3 py-1 rounded-full text-sm font-bold ${result.score >= 80
                                   ? "bg-green-600/20 text-green-400"
                                   : result.score >= 60
-                                  ? "bg-blue-600/20 text-blue-400"
-                                  : result.score >= 40
-                                  ? "bg-yellow-600/20 text-yellow-400"
-                                  : "bg-red-600/20 text-red-400"
-                              }`}
+                                    ? "bg-blue-600/20 text-blue-400"
+                                    : result.score >= 40
+                                      ? "bg-yellow-600/20 text-yellow-400"
+                                      : "bg-red-600/20 text-red-400"
+                                }`}
                             >
                               {result.score}%
                             </span>

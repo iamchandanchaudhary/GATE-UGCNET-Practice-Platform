@@ -8,10 +8,10 @@ const Navbar = () => {
     return (
         <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
             <div className="max-w-6xl mx-auto flex justify-between items-center">
-                <div>
+                <Link to={"/dashboard"}>
                     <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
                     <p className="text-gray-400 text-sm">GATE & UGC-NET Practice Platform</p>
-                </div>
+                </Link>
                 <div className="flex items-center gap-4">
                     <span className="text-gray-300">{admin?.email}</span>
                     <button
