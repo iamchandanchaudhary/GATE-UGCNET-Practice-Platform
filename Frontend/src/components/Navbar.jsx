@@ -18,8 +18,8 @@ const Navbar = () => {
   const navLinkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors duration-200 ${
       isActive
-        ? 'text-[#3475d9] border-b-2 border-[#3475d9] pb-1'
-        : 'text-gray-700 hover:text-[#3475d9]'
+        ? 'text-[#3475d9] border-b-2 border-[#3475d9] pb-0.5'
+        : 'text-gray-700 border-b-2 border-transparent hover:text-[#3475d9] pb-0.5'
     }`;
 
   return (

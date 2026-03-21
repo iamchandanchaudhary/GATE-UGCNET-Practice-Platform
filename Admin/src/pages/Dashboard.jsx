@@ -1,31 +1,15 @@
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import { FaPlus, FaList, FaSignOutAlt, FaUsers } from "react-icons/fa";
+import Navbar from "../components/Navbar";
 
 const Dashboard = () => {
   const { logout, admin } = useAdminAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-            <p className="text-gray-400 text-sm">GATE & UGC-NET Practice Platform</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-300">{admin?.email}</span>
-            <button
-              onClick={logout}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
-            >
-              <FaSignOutAlt />
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+      
+      <Navbar />
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-6 py-12">
