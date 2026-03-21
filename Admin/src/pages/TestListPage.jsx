@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import {
-  FaArrowLeft,
   FaEye,
   FaEdit,
   FaTrash,
@@ -132,55 +131,44 @@ const TestListPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading tests...</div>
+      <div className="flex items-center justify-center py-20">
+        <div className="text-gray-600 text-xl">Loading tests...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-white">Test List</h1>
+    <>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">Test List</h1>
+            <p className="text-gray-500 text-sm mt-1">Manage all your tests</p>
           </div>
           <Link
             to="/add-test"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+            className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-lg transition"
           >
             + Add New Test
           </Link>
         </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 py-6">
-        <Link
-          to="/dashboard"
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition mb-4"
-        >
-          <FaArrowLeft />
-          Back to Dashboard
-        </Link>
 
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         {tests.length === 0 ? (
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-12 text-center">
-            <FaQuestionCircle className="text-6xl text-gray-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">No Tests Found</h2>
-            <p className="text-gray-400 mb-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-sm">
+            <FaQuestionCircle className="text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">No Tests Found</h2>
+            <p className="text-gray-500 mb-6">
               You haven&apos;t created any tests yet.
             </p>
             <Link
               to="/add-test"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition"
+              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition"
             >
               Create Your First Test
             </Link>
@@ -190,19 +178,19 @@ const TestListPage = () => {
             {tests.map((test) => (
               <div
                 key={test._id}
-                className="bg-gray-800 border border-gray-700 rounded-xl p-6 flex items-center justify-between hover:border-gray-600 transition"
+                className="bg-white border border-gray-200 rounded-xl p-6 flex items-center justify-between hover:border-[#3475d9] hover:shadow-sm transition shadow-sm"
               >
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
                     {test.name}
                   </h3>
-                  <div className="flex items-center gap-6 text-gray-400">
+                  <div className="flex items-center gap-6 text-gray-500">
                     <span className="flex items-center gap-2">
-                      <FaClock />
+                      <FaClock className="text-[#3475d9]" />
                       {formatDuration(test.duration)}
                     </span>
                     <span className="flex items-center gap-2">
-                      <FaQuestionCircle />
+                      <FaQuestionCircle className="text-[#3475d9]" />
                       {test.numberOfQuestions} Questions
                     </span>
                     <span className="text-sm">
@@ -213,9 +201,9 @@ const TestListPage = () => {
 
                 <div className="flex items-center gap-3">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${test.isActive
-                        ? "bg-green-600/20 text-green-400"
-                        : "bg-red-600/20 text-red-400"
+                    className={`px-3 py-1 rounded-full text-sm border ${test.isActive
+                        ? "bg-green-50 text-green-600 border-green-200"
+                        : "bg-red-50 text-red-600 border-red-200"
                       }`}
                   >
                     {test.isActive ? "Active" : "Inactive"}
@@ -223,7 +211,7 @@ const TestListPage = () => {
 
                   <button
                     onClick={() => handleView(test._id)}
-                    className="p-2 bg-blue-600/20 text-blue-400 rounded-lg hover:bg-blue-600/30 transition"
+                    className="p-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
                     title="View"
                   >
                     <FaEye />
@@ -231,7 +219,7 @@ const TestListPage = () => {
 
                   <button
                     onClick={() => handleEdit(test._id)}
-                    className="p-2 bg-yellow-600/20 text-yellow-400 rounded-lg hover:bg-yellow-600/30 transition"
+                    className="p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition border border-yellow-200"
                     title="Edit"
                   >
                     <FaEdit />
@@ -239,7 +227,7 @@ const TestListPage = () => {
 
                   <button
                     onClick={() => setDeleteModal({ open: true, test })}
-                    className="p-2 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition"
+                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
                     title="Delete"
                   >
                     <FaTrash />
@@ -276,17 +264,17 @@ const TestListPage = () => {
 
       {/* Delete Modal */}
       {deleteModal.open && deleteModal.test && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold text-white mb-4">Delete Test</h2>
-            <p className="text-gray-400 mb-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-md w-full shadow-xl">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Delete Test</h2>
+            <p className="text-gray-600 mb-6">
               Are you sure you want to delete &quot;{deleteModal.test.name}&quot;?
               This action cannot be undone.
             </p>
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setDeleteModal({ open: false, test: null })}
-                className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+                className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
               >
                 Cancel
               </button>
@@ -300,20 +288,20 @@ const TestListPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
 // View Modal Component
 const ViewModal = ({ test, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">{test.name}</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
+        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-800">{test.name}</h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white transition"
+            className="p-2 text-gray-500 hover:text-gray-700 transition"
           >
             <FaTimes className="text-xl" />
           </button>
@@ -321,11 +309,11 @@ const ViewModal = ({ test, onClose }) => {
 
         <div className="p-6 overflow-y-auto flex-1">
           <div className="flex gap-6 mb-6">
-            <span className="bg-blue-600/20 text-blue-400 px-4 py-2 rounded-lg flex items-center gap-2">
+            <span className="bg-blue-50 text-[#3475d9] px-4 py-2 rounded-lg flex items-center gap-2 border border-blue-200">
               <FaClock />
               {test.duration === 60 ? "1 Hour" : `${test.duration} Minutes`}
             </span>
-            <span className="bg-green-600/20 text-green-400 px-4 py-2 rounded-lg flex items-center gap-2">
+            <span className="bg-green-50 text-green-600 px-4 py-2 rounded-lg flex items-center gap-2 border border-green-200">
               <FaQuestionCircle />
               {test.numberOfQuestions} Questions
             </span>
@@ -335,9 +323,9 @@ const ViewModal = ({ test, onClose }) => {
             {test.questions.map((q, index) => (
               <div
                 key={index}
-                className="bg-gray-700/50 rounded-lg p-4 border border-gray-600"
+                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
               >
-                <h4 className="text-white font-medium mb-3">
+                <h4 className="text-gray-800 font-medium mb-3">
                   Q{index + 1}. {q.questionText}
                 </h4>
                 <div className="grid md:grid-cols-2 gap-2">
@@ -345,8 +333,8 @@ const ViewModal = ({ test, onClose }) => {
                     <div
                       key={oIndex}
                       className={`p-2 rounded flex items-center gap-2 ${q.correctAnswer === oIndex
-                          ? "bg-green-600/20 text-green-400"
-                          : "bg-gray-600/50 text-gray-300"
+                          ? "bg-green-50 text-green-700 border border-green-200"
+                          : "bg-white text-gray-600 border border-gray-200"
                         }`}
                     >
                       <span className="font-bold">
@@ -354,7 +342,7 @@ const ViewModal = ({ test, onClose }) => {
                       </span>
                       {opt}
                       {q.correctAnswer === oIndex && (
-                        <FaCheck className="ml-auto" />
+                        <FaCheck className="ml-auto text-green-600" />
                       )}
                     </div>
                   ))}
@@ -364,10 +352,10 @@ const ViewModal = ({ test, onClose }) => {
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+            className="w-full py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
           >
             Close
           </button>
@@ -442,13 +430,13 @@ const EditModal = ({ test, token, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Edit Test</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
+        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-800">Edit Test</h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white transition"
+            className="p-2 text-gray-500 hover:text-gray-700 transition"
           >
             <FaTimes className="text-xl" />
           </button>
@@ -456,31 +444,31 @@ const EditModal = ({ test, token, onClose, onSave }) => {
 
         <div className="p-6 overflow-y-auto flex-1">
           {error && (
-            <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
               {error}
             </div>
           )}
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
                 Test Name
               </label>
               <input
                 type="text"
                 value={testName}
                 onChange={(e) => setTestName(e.target.value)}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-blue-500 outline-none"
+                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
               />
             </div>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
                 Duration
               </label>
               <select
                 value={duration}
                 onChange={(e) => setDuration(parseInt(e.target.value))}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-blue-500 outline-none"
+                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
               >
                 <option value={10}>10 Minutes</option>
                 <option value={20}>20 Minutes</option>
@@ -489,13 +477,13 @@ const EditModal = ({ test, token, onClose, onSave }) => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
                 Status
               </label>
               <select
                 value={isActive}
                 onChange={(e) => setIsActive(e.target.value === "true")}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-blue-500 outline-none"
+                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
               >
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
@@ -503,21 +491,21 @@ const EditModal = ({ test, token, onClose, onSave }) => {
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-white mb-4">Questions</h3>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Questions</h3>
           <div className="space-y-4">
             {questions.map((q, qIndex) => (
               <div
                 key={qIndex}
-                className="bg-gray-700/50 rounded-lg p-4 border border-gray-600"
+                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
               >
                 <div className="mb-3">
-                  <label className="block text-gray-300 text-sm mb-1">
+                  <label className="block text-gray-700 text-sm mb-1">
                     Question {qIndex + 1}
                   </label>
                   <textarea
                     value={q.questionText}
                     onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
-                    className="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 outline-none resize-none"
+                    className="w-full bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none resize-none"
                     rows={2}
                   />
                 </div>
@@ -529,7 +517,7 @@ const EditModal = ({ test, token, onClose, onSave }) => {
                         onClick={() => handleCorrectAnswerChange(qIndex, oIndex)}
                         className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${q.correctAnswer === oIndex
                             ? "bg-green-600 text-white"
-                            : "bg-gray-600 text-gray-400"
+                            : "bg-gray-200 text-gray-500"
                           }`}
                       >
                         {String.fromCharCode(65 + oIndex)}
@@ -540,7 +528,7 @@ const EditModal = ({ test, token, onClose, onSave }) => {
                         onChange={(e) =>
                           handleOptionChange(qIndex, oIndex, e.target.value)
                         }
-                        className="flex-1 bg-gray-700 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 outline-none"
+                        className="flex-1 bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none"
                       />
                     </div>
                   ))}
@@ -550,17 +538,17 @@ const EditModal = ({ test, token, onClose, onSave }) => {
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-700 flex justify-end gap-4">
+        <div className="p-4 border-t border-gray-200 flex justify-end gap-4">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+            className="px-6 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-blue-800"
+            className="px-6 py-2 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

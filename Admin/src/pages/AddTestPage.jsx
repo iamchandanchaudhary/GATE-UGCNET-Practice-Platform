@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import { FaArrowLeft, FaPlus, FaTrash, FaCheck } from "react-icons/fa";
+import { FaPlus, FaCheck } from "react-icons/fa";
 
 const AddTestPage = () => {
   const { token } = useAdminAuth();
@@ -145,191 +145,178 @@ const AddTestPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-white">Add New Test</h1>
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Add New Test</h1>
+        <p className="text-gray-500 text-sm mt-1">Create a new test with questions for students</p>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+          {error}
         </div>
-      </header>
+      )}
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-6">
-        <Link
-          to="/dashboard"
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition mb-4"
-        >
-          <FaArrowLeft />
-          Back to Dashboard
-        </Link>
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-6">
+          {success}
+        </div>
+      )}
 
-        {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
-            {error}
-          </div>
-        )}
+      <form onSubmit={handleSubmit}>
+        {/* Test Configuration */}
+        <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-800 mb-6">Test Configuration</h2>
 
-        {success && (
-          <div className="bg-green-500/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg mb-6">
-            {success}
-          </div>
-        )}
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Test Name
+              </label>
+              <input
+                type="text"
+                value={testName}
+                onChange={(e) => setTestName(e.target.value)}
+                className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition"
+                placeholder="e.g., GATE CS Mock Test 1"
+              />
+            </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* Test Configuration */}
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-6">
-            <h2 className="text-xl font-bold text-white mb-6">Test Configuration</h2>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Duration
+              </label>
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition"
+              >
+                <option value="">Select Duration</option>
+                {durationOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  Test Name
-                </label>
-                <input
-                  type="text"
-                  value={testName}
-                  onChange={(e) => setTestName(e.target.value)}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                  placeholder="e.g., GATE CS Mock Test 1"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  Duration
-                </label>
-                <select
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                >
-                  <option value="">Select Duration</option>
-                  {durationOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  Number of Questions
-                </label>
-                <select
-                  value={numberOfQuestions}
-                  onChange={(e) => handleNumberOfQuestionsChange(e.target.value)}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                >
-                  <option value="">Select Number</option>
-                  {questionOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Number of Questions
+              </label>
+              <select
+                value={numberOfQuestions}
+                onChange={(e) => handleNumberOfQuestionsChange(e.target.value)}
+                className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition"
+              >
+                <option value="">Select Number</option>
+                {questionOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
+        </div>
 
-          {/* Questions */}
-          {questions.length > 0 && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold text-white">
-                Questions ({questions.length})
-              </h2>
+        {/* Questions */}
+        {questions.length > 0 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-bold text-gray-800">
+              Questions ({questions.length})
+            </h2>
 
-              {questions.map((question, qIndex) => (
-                <div
-                  key={question.id}
-                  className="bg-gray-800 border border-gray-700 rounded-xl p-6"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      Question {qIndex + 1}
-                    </h3>
-                    {question.correctAnswer !== null && (
-                      <span className="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                        <FaCheck className="text-xs" />
-                        Answer Selected
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-300 text-sm font-medium mb-2">
-                      Question Text
-                    </label>
-                    <textarea
-                      value={question.questionText}
-                      onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
-                      className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition resize-none"
-                      rows={2}
-                      placeholder="Enter your question here..."
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {question.options.map((option, oIndex) => (
-                      <div key={oIndex} className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => handleCorrectAnswerChange(qIndex, oIndex)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition ${
-                            question.correctAnswer === oIndex
-                              ? "bg-green-600 text-white"
-                              : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                          }`}
-                        >
-                          {String.fromCharCode(65 + oIndex)}
-                        </button>
-                        <input
-                          type="text"
-                          value={option}
-                          onChange={(e) =>
-                            handleOptionChange(qIndex, oIndex, e.target.value)
-                          }
-                          className="flex-1 bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                          placeholder={`Option ${String.fromCharCode(65 + oIndex)}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  <p className="text-gray-500 text-sm mt-4">
-                    Click on A, B, C, or D to mark the correct answer
-                  </p>
-                </div>
-              ))}
-
-              {/* Submit Button */}
-              <div className="flex justify-end gap-4 pt-4">
-                <Link
-                  to="/dashboard"
-                  className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
-                >
-                  Cancel
-                </Link>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-blue-800 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {loading ? (
-                    "Creating..."
-                  ) : (
-                    <>
-                      <FaPlus />
-                      Create Test
-                    </>
+            {questions.map((question, qIndex) => (
+              <div
+                key={question.id}
+                className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Question {qIndex + 1}
+                  </h3>
+                  {question.correctAnswer !== null && (
+                    <span className="bg-green-50 text-green-600 px-3 py-1 rounded-full text-sm flex items-center gap-1 border border-green-200">
+                      <FaCheck className="text-xs" />
+                      Answer Selected
+                    </span>
                   )}
-                </button>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-medium mb-2">
+                    Question Text
+                  </label>
+                  <textarea
+                    value={question.questionText}
+                    onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
+                    className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition resize-none"
+                    rows={2}
+                    placeholder="Enter your question here..."
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {question.options.map((option, oIndex) => (
+                    <div key={oIndex} className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => handleCorrectAnswerChange(qIndex, oIndex)}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition ${
+                          question.correctAnswer === oIndex
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 border border-gray-300"
+                        }`}
+                      >
+                        {String.fromCharCode(65 + oIndex)}
+                      </button>
+                      <input
+                        type="text"
+                        value={option}
+                        onChange={(e) =>
+                          handleOptionChange(qIndex, oIndex, e.target.value)
+                        }
+                        className="flex-1 bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition"
+                        placeholder={`Option ${String.fromCharCode(65 + oIndex)}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-gray-500 text-sm mt-4">
+                  Click on A, B, C, or D to mark the correct answer
+                </p>
               </div>
+            ))}
+
+            {/* Submit Button */}
+            <div className="flex justify-end gap-4 pt-4">
+              <Link
+                to="/dashboard"
+                className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+              >
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-8 py-3 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {loading ? (
+                  "Creating..."
+                ) : (
+                  <>
+                    <FaPlus />
+                    Create Test
+                  </>
+                )}
+              </button>
             </div>
-          )}
-        </form>
-      </main>
-    </div>
+          </div>
+        )}
+      </form>
+    </main>
   );
 };
 
