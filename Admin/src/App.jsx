@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import AddTestPage from "./pages/AddTestPage";
 import TestListPage from "./pages/TestListPage";
+import RegisteredUsersPage from "./pages/RegisteredUsersPage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAdminAuth();
@@ -73,6 +74,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <TestListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <RegisteredUsersPage />
           </ProtectedRoute>
         }
       />

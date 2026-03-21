@@ -5,6 +5,7 @@ const connectDB = require("./config/connectDB.js");
 const authRoutes = require("./routes/authRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const testRoutes = require("./routes/testRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 dotenv.config();
 connectDB();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
