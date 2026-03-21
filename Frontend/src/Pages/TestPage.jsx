@@ -7,10 +7,12 @@ import {
   HiOutlineExclamationCircle,
   HiX,
 } from 'react-icons/hi';
+import { useAuth } from '../context/AuthContext';
 
 function TestPage() {
   const navigate = useNavigate();
   const { testId } = useParams();
+  const { user } = useAuth();
 
   const [test, setTest] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -58,13 +60,20 @@ function TestPage() {
     setIsSubmitting(true);
 
     try {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add auth token if user is logged in
+      if (user?.token) {
+        headers['Authorization'] = `Bearer ${user.token}`;
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/tests/public/${testId}/submit`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers,
           body: JSON.stringify({
             answers: selected,
             timeTaken: totalTime - timeLeft,
@@ -86,7 +95,7 @@ function TestPage() {
       setError('Connection error. Please try again.');
       setIsSubmitting(false);
     }
-  }, [selected, timeLeft, totalTime, testId, navigate, isSubmitting]);
+  }, [selected, timeLeft, totalTime, testId, navigate, isSubmitting, user]);
 
   // Timer
   useEffect(() => {

@@ -1,4 +1,5 @@
 const Test = require("../models/Test");
+const TestResult = require("../models/TestResult");
 
 const createTest = async (req, res) => {
   try {
@@ -255,6 +256,30 @@ const submitTest = async (req, res) => {
     const totalQuestions = test.questions.length;
     const score = Math.round((correct / totalQuestions) * 100);
 
+    // Save result to database if user is authenticated
+    if (req.user) {
+      const testResult = new TestResult({
+        user: req.user._id,
+        test: test._id,
+        testName: test.name,
+        totalQuestions,
+        correct,
+        wrong,
+        unanswered,
+        score,
+        timeTaken,
+        answers: answers.map((answer, index) => ({
+          questionIndex: index,
+          userAnswer: answer,
+          isCorrect: answer !== null && answer !== undefined
+            ? answer === test.questions[index].correctAnswer
+            : null,
+        })),
+      });
+
+      await testResult.save();
+    }
+
     res.status(200).json({
       success: true,
       result: {
@@ -277,6 +302,95 @@ const submitTest = async (req, res) => {
   }
 };
 
+// Get user's test results
+const getUserTestResults = async (req, res) => {
+  try {
+    const results = await TestResult.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .select("-answers");
+
+    res.status(200).json({
+      success: true,
+      count: results.length,
+      results,
+    });
+  } catch (error) {
+    console.error("Get user test results error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// Get user's test statistics for reports
+const getUserTestStats = async (req, res) => {
+  try {
+    const results = await TestResult.find({ user: req.user._id })
+      .sort({ createdAt: -1 });
+
+    if (results.length === 0) {
+      return res.status(200).json({
+        success: true,
+        stats: {
+          totalTests: 0,
+          avgScore: 0,
+          totalCorrect: 0,
+          totalWrong: 0,
+          totalUnanswered: 0,
+          performanceTrend: [],
+          recentTests: [],
+        },
+      });
+    }
+
+    const totalTests = results.length;
+    const avgScore = Math.round(
+      results.reduce((sum, r) => sum + r.score, 0) / totalTests
+    );
+    const totalCorrect = results.reduce((sum, r) => sum + r.correct, 0);
+    const totalWrong = results.reduce((sum, r) => sum + r.wrong, 0);
+    const totalUnanswered = results.reduce((sum, r) => sum + r.unanswered, 0);
+
+    // Performance trend (last 10 tests)
+    const performanceTrend = results.slice(0, 10).reverse().map((r, idx) => ({
+      test: `Test ${idx + 1}`,
+      testName: r.testName,
+      score: r.score,
+      date: r.createdAt,
+    }));
+
+    // Recent tests (last 5)
+    const recentTests = results.slice(0, 5).map((r) => ({
+      id: r._id,
+      testName: r.testName,
+      score: r.score,
+      totalQuestions: r.totalQuestions,
+      correct: r.correct,
+      date: r.createdAt,
+    }));
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        totalTests,
+        avgScore,
+        totalCorrect,
+        totalWrong,
+        totalUnanswered,
+        performanceTrend,
+        recentTests,
+      },
+    });
+  } catch (error) {
+    console.error("Get user test stats error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   createTest,
   getAllTests,
@@ -286,4 +400,6 @@ module.exports = {
   getActiveTests,
   getTestForAttempt,
   submitTest,
+  getUserTestResults,
+  getUserTestStats,
 };
