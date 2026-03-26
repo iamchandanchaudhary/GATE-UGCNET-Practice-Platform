@@ -8,7 +8,7 @@ import {
   HiOutlinePlay,
   HiX,
 } from 'react-icons/hi';
-import Sidebar from '../components/Sidebar';
+import DashboardLayout from '../components/DashboardLayout';
 
 function StartTestPage() {
   const [tests, setTests] = useState([]);
@@ -64,151 +64,147 @@ function StartTestPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-100">
-        <Sidebar />
-        <main className="ml-56 flex-1 p-8 flex items-center justify-center">
-          <div className="text-gray-600 text-xl">Loading tests...</div>
-        </main>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="text-gray-600 text-lg lg:text-xl">Loading tests...</div>
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <main className="ml-56 flex-1 p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Start New Test</h1>
-          <p className="text-gray-500 mt-1">
-            Choose a test to begin your practice session
+    <DashboardLayout>
+      {/* Header */}
+      <div className="mb-6 lg:mb-8">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">Start New Test</h1>
+        <p className="text-gray-500 mt-1 text-sm lg:text-base">
+          Choose a test to begin your practice session
+        </p>
+      </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+          {error}
+        </div>
+      )}
+
+      {tests.length === 0 ? (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 lg:p-12 text-center">
+          <HiOutlineClipboardList className="text-5xl lg:text-6xl text-gray-400 mx-auto mb-4" />
+          <h2 className="text-xl lg:text-2xl font-bold text-gray-700 mb-2">No Tests Available</h2>
+          <p className="text-gray-500 text-sm lg:text-base">
+            Please check back later for new practice tests.
           </p>
         </div>
+      ) : (
+        <div className="grid gap-4 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {tests.map((test) => (
+            <div
+              key={test._id}
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200"
+            >
+              <div className="flex items-center gap-3 mb-3 lg:mb-4">
+                <div className="bg-blue-100 p-2 lg:p-3 rounded-lg">
+                  <HiOutlineAcademicCap className="text-xl lg:text-2xl text-[#3475d9]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base lg:text-lg font-bold text-gray-800 truncate">
+                    {test.name}
+                  </h3>
+                </div>
+              </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
-          </div>
-        )}
+              <div className="flex flex-wrap items-center gap-3 lg:gap-4 mb-3 lg:mb-4 text-xs lg:text-sm text-gray-600">
+                <div className="flex items-center gap-1">
+                  <HiOutlineClipboardList className="text-base lg:text-lg text-[#3475d9]" />
+                  <span>{test.numberOfQuestions} Questions</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <HiOutlineClock className="text-base lg:text-lg text-[#3475d9]" />
+                  <span>{formatDuration(test.duration)}</span>
+                </div>
+              </div>
 
-        {tests.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-            <HiOutlineClipboardList className="text-6xl text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-700 mb-2">No Tests Available</h2>
-            <p className="text-gray-500">
-              Please check back later for new practice tests.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {tests.map((test) => (
-              <div
-                key={test._id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200"
+              <button
+                onClick={() => handleStartTest(test)}
+                className="w-full flex items-center justify-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 cursor-pointer text-sm lg:text-base"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-blue-100 p-3 rounded-lg">
-                    <HiOutlineAcademicCap className="text-2xl text-[#3475d9]" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-800 line-clamp-1">
-                      {test.name}
-                    </h3>
-                  </div>
-                </div>
+                <HiOutlinePlay className="text-lg" />
+                Start Test
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
-                <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <HiOutlineClipboardList className="text-lg text-[#3475d9]" />
-                    <span>{test.numberOfQuestions} Questions</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <HiOutlineClock className="text-lg text-[#3475d9]" />
-                    <span>{formatDuration(test.duration)}</span>
-                  </div>
-                </div>
+      {/* Confirmation Modal */}
+      {showConfirm && selectedTest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-[#3475d9] px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+              <h3 className="text-base lg:text-lg font-bold text-white">Confirm Start Test</h3>
+              <button
+                onClick={handleCancel}
+                className="text-white/80 hover:text-white transition-colors cursor-pointer"
+              >
+                <HiX className="text-xl" />
+              </button>
+            </div>
 
-                <button
-                  onClick={() => handleStartTest(test)}
-                  className="w-full flex items-center justify-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-lg transition-colors duration-200 cursor-pointer"
-                >
-                  <HiOutlinePlay className="text-lg" />
-                  Start Test
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Confirmation Modal */}
-        {showConfirm && selectedTest && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-0 overflow-hidden animate-in">
-              {/* Modal Header */}
-              <div className="bg-[#3475d9] px-6 py-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white">Confirm Start Test</h3>
-                <button
-                  onClick={handleCancel}
-                  className="text-white/80 hover:text-white transition-colors cursor-pointer"
-                >
-                  <HiX className="text-xl" />
-                </button>
-              </div>
-
-              {/* Modal Body */}
-              <div className="px-6 py-6">
-                <div className="mb-4">
-                  <h4 className="text-xl font-bold text-gray-800">{selectedTest.name}</h4>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                    <span>{selectedTest.numberOfQuestions} Questions</span>
-                    <span>{formatDuration(selectedTest.duration)}</span>
-                  </div>
-                </div>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                  <h5 className="font-semibold text-amber-800 flex items-center gap-2 mb-2">
-                    <HiOutlineExclamationCircle className="text-lg" />
-                    Instructions
-                  </h5>
-                  <ul className="text-sm text-amber-700 space-y-1">
-                    <li>• Each question carries equal marks.</li>
-                    <li>• No negative marking in this test.</li>
-                    <li>• Test auto-submits when timer expires.</li>
-                    <li>• You can navigate between questions.</li>
-                    <li>• Do not refresh the page during test.</li>
-                  </ul>
-                </div>
-
-                <div className="flex items-start gap-3 text-sm text-gray-600">
-                  <HiOutlineExclamationCircle className="text-xl text-amber-500 shrink-0 mt-0.5" />
-                  <p>
-                    The timer ({formatDuration(selectedTest.duration)}) will begin immediately.
-                    You cannot pause once started.
-                  </p>
+            {/* Modal Body */}
+            <div className="px-4 lg:px-6 py-4 lg:py-6">
+              <div className="mb-4">
+                <h4 className="text-lg lg:text-xl font-bold text-gray-800">{selectedTest.name}</h4>
+                <div className="flex items-center gap-4 mt-2 text-xs lg:text-sm text-gray-600">
+                  <span>{selectedTest.numberOfQuestions} Questions</span>
+                  <span>{formatDuration(selectedTest.duration)}</span>
                 </div>
               </div>
 
-              {/* Modal Footer */}
-              <div className="px-6 py-4 bg-gray-50 flex items-center justify-end gap-3">
-                <button
-                  onClick={handleCancel}
-                  className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleConfirm}
-                  className="px-5 py-2.5 rounded-lg bg-[#3475d9] text-white font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <HiOutlinePlay className="text-lg" />
-                  Yes, Start Test
-                </button>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 lg:p-4 mb-4">
+                <h5 className="font-semibold text-amber-800 flex items-center gap-2 mb-2 text-sm">
+                  <HiOutlineExclamationCircle className="text-lg" />
+                  Instructions
+                </h5>
+                <ul className="text-xs lg:text-sm text-amber-700 space-y-1">
+                  <li>• Each question carries equal marks.</li>
+                  <li>• No negative marking in this test.</li>
+                  <li>• Test auto-submits when timer expires.</li>
+                  <li>• You can navigate between questions.</li>
+                  <li>• Do not refresh the page during test.</li>
+                </ul>
+              </div>
+
+              <div className="flex items-start gap-3 text-xs lg:text-sm text-gray-600">
+                <HiOutlineExclamationCircle className="text-lg lg:text-xl text-amber-500 shrink-0 mt-0.5" />
+                <p>
+                  The timer ({formatDuration(selectedTest.duration)}) will begin immediately.
+                  You cannot pause once started.
+                </p>
               </div>
             </div>
+
+            {/* Modal Footer */}
+            <div className="px-4 lg:px-6 py-3 lg:py-4 bg-gray-50 flex items-center justify-end gap-3">
+              <button
+                onClick={handleCancel}
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-[#3475d9] text-white font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer text-sm"
+              >
+                <HiOutlinePlay className="text-lg" />
+                Yes, Start Test
+              </button>
+            </div>
           </div>
-        )}
-      </main>
-    </div>
+        </div>
+      )}
+    </DashboardLayout>
   );
 }
 

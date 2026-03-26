@@ -6,6 +6,7 @@ import {
   HiOutlineChevronRight,
   HiOutlineExclamationCircle,
   HiX,
+  HiOutlineViewGrid,
 } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
 
@@ -25,6 +26,7 @@ function TestPage() {
   const [totalTime, setTotalTime] = useState(0);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showQuestionNav, setShowQuestionNav] = useState(false);
 
   useEffect(() => {
     fetchTest();
@@ -122,24 +124,29 @@ function TestPage() {
     setSelected(copy);
   };
 
+  const handleQuestionSelect = (index) => {
+    setCurrentQ(index);
+    setShowQuestionNav(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-600 text-xl">Loading test...</div>
+        <div className="text-gray-600 text-lg lg:text-xl">Loading test...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center max-w-md">
-          <HiOutlineExclamationCircle className="text-5xl text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Error</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:p-8 text-center max-w-md w-full">
+          <HiOutlineExclamationCircle className="text-4xl lg:text-5xl text-red-500 mx-auto mb-4" />
+          <h2 className="text-lg lg:text-xl font-bold text-gray-800 mb-2">Error</h2>
+          <p className="text-gray-600 mb-4 text-sm lg:text-base">{error}</p>
           <button
             onClick={() => navigate('/start-test')}
-            className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg"
+            className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg text-sm lg:text-base"
           >
             Go Back
           </button>
@@ -154,40 +161,49 @@ function TestPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
-        <div>
-          <h1 className="text-lg font-bold text-gray-800">
-            {test?.name || 'Practice Test'}
-          </h1>
-          <p className="text-xs text-gray-500">
-            Question {currentQ + 1} of {questions.length}
-          </p>
+      <header className="bg-white border-b border-gray-200 px-3 lg:px-6 py-2 lg:py-3 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center gap-2 lg:gap-4">
+          {/* Mobile Question Nav Toggle */}
+          <button
+            onClick={() => setShowQuestionNav(true)}
+            className="lg:hidden p-2 bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <HiOutlineViewGrid className="text-xl" />
+          </button>
+          <div>
+            <h1 className="text-sm lg:text-lg font-bold text-gray-800 truncate max-w-[150px] sm:max-w-none">
+              {test?.name || 'Practice Test'}
+            </h1>
+            <p className="text-xs text-gray-500">
+              Q {currentQ + 1} / {questions.length}
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 lg:gap-6">
           {/* Timer */}
           <div
-            className={`flex items-center gap-2 text-lg font-mono font-bold px-4 py-2 rounded-lg ${
+            className={`flex items-center gap-1 lg:gap-2 text-sm lg:text-lg font-mono font-bold px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg ${
               isLowTime
                 ? 'bg-red-100 text-red-600 animate-pulse'
                 : 'bg-blue-50 text-[#3475d9]'
             }`}
           >
-            <HiOutlineClock className="text-xl" />
+            <HiOutlineClock className="text-lg lg:text-xl" />
             {formatTime(timeLeft)}
           </div>
           <button
             onClick={() => setShowSubmitConfirm(true)}
             disabled={isSubmitting}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400"
+            className="hidden sm:block bg-green-600 hover:bg-green-700 text-white font-semibold px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Test'}
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </header>
 
       <div className="flex flex-1">
-        {/* Question Navigation Panel */}
-        <aside className="w-56 bg-white border-r border-gray-200 p-4 fixed top-15.25 bottom-0 left-0 overflow-y-auto">
+        {/* Question Navigation Panel - Desktop */}
+        <aside className="hidden lg:block w-56 bg-white border-r border-gray-200 p-4 fixed top-[61px] bottom-0 left-0 overflow-y-auto">
           <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">
             Questions
           </h3>
@@ -225,32 +241,32 @@ function TestPage() {
         </aside>
 
         {/* Main Question Area */}
-        <main className="ml-56 flex-1 p-8">
+        <main className="flex-1 p-4 lg:p-8 lg:ml-56">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-8">
               {/* Question */}
-              <div className="mb-6">
-                <span className="text-xs font-semibold text-[#3475d9] bg-blue-50 px-2.5 py-1 rounded-full">
+              <div className="mb-4 lg:mb-6">
+                <span className="text-xs font-semibold text-[#3475d9] bg-blue-50 px-2 lg:px-2.5 py-1 rounded-full">
                   Question {currentQ + 1}
                 </span>
-                <h2 className="text-lg font-semibold text-gray-800 mt-3 leading-relaxed">
+                <h2 className="text-base lg:text-lg font-semibold text-gray-800 mt-3 leading-relaxed">
                   {questions[currentQ]?.question}
                 </h2>
               </div>
 
               {/* Options */}
-              <div className="space-y-3">
+              <div className="space-y-2 lg:space-y-3">
                 {questions[currentQ]?.options.map((option, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSelect(idx)}
-                    className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all duration-150 cursor-pointer ${
+                    className={`w-full text-left px-3 lg:px-5 py-3 lg:py-4 rounded-lg border-2 transition-all duration-150 cursor-pointer text-sm lg:text-base ${
                       selected[currentQ] === idx
                         ? 'border-[#3475d9] bg-blue-50 text-[#3475d9]'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700'
                     }`}
                   >
-                    <span className="font-semibold mr-3">
+                    <span className="font-semibold mr-2 lg:mr-3">
                       {String.fromCharCode(65 + idx)}.
                     </span>
                     {option}
@@ -266,7 +282,7 @@ function TestPage() {
                     copy[currentQ] = null;
                     setSelected(copy);
                   }}
-                  className="mt-4 text-sm text-red-500 hover:text-red-700 font-medium cursor-pointer"
+                  className="mt-3 lg:mt-4 text-xs lg:text-sm text-red-500 hover:text-red-700 font-medium cursor-pointer"
                 >
                   Clear Selection
                 </button>
@@ -274,28 +290,38 @@ function TestPage() {
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center justify-between mt-4 lg:mt-6 gap-3">
               <button
                 onClick={() => setCurrentQ((c) => Math.max(0, c - 1))}
                 disabled={currentQ === 0}
-                className="flex items-center gap-1 px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-sm lg:text-base"
               >
                 <HiOutlineChevronLeft />
-                Previous
+                <span className="hidden sm:inline">Previous</span>
               </button>
+
+              {/* Mobile Submit Button */}
+              <button
+                onClick={() => setShowSubmitConfirm(true)}
+                disabled={isSubmitting}
+                className="sm:hidden flex-1 mx-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm"
+              >
+                Submit
+              </button>
+
               {currentQ < questions.length - 1 ? (
                 <button
                   onClick={() => setCurrentQ((c) => c + 1)}
-                  className="flex items-center gap-1 px-5 py-2.5 rounded-lg bg-[#3475d9] hover:bg-blue-700 text-white font-medium transition-colors cursor-pointer"
+                  className="flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-[#3475d9] hover:bg-blue-700 text-white font-medium transition-colors cursor-pointer text-sm lg:text-base"
                 >
-                  Next
+                  <span className="hidden sm:inline">Next</span>
                   <HiOutlineChevronRight />
                 </button>
               ) : (
                 <button
                   onClick={() => setShowSubmitConfirm(true)}
                   disabled={isSubmitting}
-                  className="flex items-center gap-1 px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors cursor-pointer disabled:bg-green-400"
+                  className="hidden sm:flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
                 >
                   Submit Test
                 </button>
@@ -305,12 +331,80 @@ function TestPage() {
         </main>
       </div>
 
+      {/* Mobile Question Navigation Panel */}
+      {showQuestionNav && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowQuestionNav(false)}
+          />
+          {/* Panel */}
+          <div className="relative bg-white w-72 max-w-[85vw] h-full overflow-y-auto p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-gray-800">
+                Questions
+              </h3>
+              <button
+                onClick={() => setShowQuestionNav(false)}
+                className="p-1 text-gray-500 hover:text-gray-700"
+              >
+                <HiX className="text-xl" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-5 gap-2 mb-6">
+              {questions.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleQuestionSelect(i)}
+                  className={`w-10 h-10 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                    currentQ === i
+                      ? 'bg-[#3475d9] text-white'
+                      : selected[i] !== null
+                      ? 'bg-green-100 text-green-700 border border-green-300'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-2 text-sm text-gray-500 border-t border-gray-200 pt-4">
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-sm bg-green-100 border border-green-300 inline-block" />
+                Answered ({answeredCount})
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-sm bg-gray-100 inline-block" />
+                Not Answered ({questions.length - answeredCount})
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-sm bg-[#3475d9] inline-block" />
+                Current
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setShowQuestionNav(false);
+                setShowSubmitConfirm(true);
+              }}
+              className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+            >
+              Submit Test
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Submit Confirmation Modal */}
       {showSubmitConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
-            <div className="bg-green-600 px-6 py-4 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">Submit Test</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-green-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+              <h3 className="text-base lg:text-lg font-bold text-white">Submit Test</h3>
               <button
                 onClick={() => setShowSubmitConfirm(false)}
                 className="text-white/80 hover:text-white transition-colors cursor-pointer"
@@ -318,37 +412,37 @@ function TestPage() {
                 <HiX className="text-xl" />
               </button>
             </div>
-            <div className="px-6 py-6">
-              <div className="flex items-start gap-4">
+            <div className="px-4 lg:px-6 py-4 lg:py-6">
+              <div className="flex items-start gap-3 lg:gap-4">
                 <div className="bg-amber-100 p-2 rounded-full shrink-0 mt-0.5">
-                  <HiOutlineExclamationCircle className="text-2xl text-amber-600" />
+                  <HiOutlineExclamationCircle className="text-xl lg:text-2xl text-amber-600" />
                 </div>
                 <div>
-                  <p className="text-gray-800 font-medium mb-2">
+                  <p className="text-gray-800 font-medium mb-2 text-sm lg:text-base">
                     Are you sure you want to submit the test?
                   </p>
-                  <p className="text-sm text-gray-500 mb-1">
+                  <p className="text-xs lg:text-sm text-gray-500 mb-1">
                     Answered: <strong className="text-green-600">{answeredCount}</strong> / {questions.length}
                   </p>
                   {answeredCount < questions.length && (
-                    <p className="text-sm text-amber-600">
+                    <p className="text-xs lg:text-sm text-amber-600">
                       You have {questions.length - answeredCount} unanswered question(s).
                     </p>
                   )}
                 </div>
               </div>
             </div>
-            <div className="px-6 py-4 bg-gray-50 flex items-center justify-end gap-3">
+            <div className="px-4 lg:px-6 py-3 lg:py-4 bg-gray-50 flex items-center justify-end gap-3">
               <button
                 onClick={() => setShowSubmitConfirm(false)}
-                className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
               >
                 Go Back
               </button>
               <button
                 onClick={handleFinish}
                 disabled={isSubmitting}
-                className="px-5 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer disabled:bg-green-400"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer disabled:bg-green-400 text-sm"
               >
                 {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
               </button>

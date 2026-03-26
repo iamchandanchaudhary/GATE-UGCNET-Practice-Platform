@@ -20,7 +20,7 @@ import {
   HiOutlineClipboardList,
   HiOutlineCheckCircle,
 } from 'react-icons/hi';
-import Sidebar from '../components/Sidebar';
+import DashboardLayout from '../components/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 
 const COLORS = ['#22c55e', '#ef4444', '#9ca3af'];
@@ -62,23 +62,21 @@ function ReportsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-100">
-        <Sidebar />
-        <main className="ml-56 flex-1 p-8 flex items-center justify-center">
-          <div className="text-gray-600 text-xl">Loading reports...</div>
-        </main>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="text-gray-600 text-lg lg:text-xl">Loading reports...</div>
+        </div>
+      </DashboardLayout>
     );
   }
 
   if (error) {
     return (
-      <div className="flex min-h-screen bg-gray-100">
-        <Sidebar />
-        <main className="ml-56 flex-1 p-8 flex items-center justify-center">
-          <div className="text-red-600 text-xl">{error}</div>
-        </main>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="text-red-600 text-lg lg:text-xl">{error}</div>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -106,153 +104,150 @@ function ReportsPage() {
   // Test-wise scores for bar chart
   const testScores = hasData
     ? stats.recentTests.map((t) => ({
-        test: t.testName.length > 15 ? t.testName.substring(0, 15) + '...' : t.testName,
+        test: t.testName.length > 12 ? t.testName.substring(0, 12) + '...' : t.testName,
         score: t.score,
       }))
     : [];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <main className="ml-56 flex-1 p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Performance Reports</h1>
-          <p className="text-gray-500 mt-1">
-            Detailed analysis of your test performance and progress
+    <DashboardLayout>
+      {/* Header */}
+      <div className="mb-6 lg:mb-8">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">Performance Reports</h1>
+        <p className="text-gray-500 mt-1 text-sm lg:text-base">
+          Detailed analysis of your test performance and progress
+        </p>
+      </div>
+
+      {!hasData ? (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 lg:p-12 text-center">
+          <HiOutlineClipboardList className="text-5xl lg:text-6xl text-gray-300 mx-auto mb-4" />
+          <h2 className="text-lg lg:text-xl font-bold text-gray-800 mb-2">No Test Data Yet</h2>
+          <p className="text-gray-500 text-sm lg:text-base">
+            Take some tests to see your performance analysis and reports here.
           </p>
         </div>
-
-        {!hasData ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-            <HiOutlineClipboardList className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-gray-800 mb-2">No Test Data Yet</h2>
-            <p className="text-gray-500">
-              Take some tests to see your performance analysis and reports here.
-            </p>
+      ) : (
+        <>
+          {/* Overview Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-6 lg:mb-8">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-5 flex items-center gap-3 lg:gap-4">
+              <div className="bg-blue-100 p-2 lg:p-3 rounded-lg">
+                <HiOutlineAcademicCap className="text-xl lg:text-2xl text-[#3475d9]" />
+              </div>
+              <div>
+                <p className="text-xl lg:text-2xl font-bold text-gray-800">{stats.avgScore}%</p>
+                <p className="text-xs lg:text-sm text-gray-500">Avg. Score</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-5 flex items-center gap-3 lg:gap-4">
+              <div className="bg-green-100 p-2 lg:p-3 rounded-lg">
+                <HiOutlineTrendingUp className="text-xl lg:text-2xl text-green-600" />
+              </div>
+              <div>
+                <p className={`text-xl lg:text-2xl font-bold ${improvement >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {improvement >= 0 ? '+' : ''}{improvement}%
+                </p>
+                <p className="text-xs lg:text-sm text-gray-500">Improvement</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-5 flex items-center gap-3 lg:gap-4">
+              <div className="bg-purple-100 p-2 lg:p-3 rounded-lg">
+                <HiOutlineClipboardList className="text-xl lg:text-2xl text-purple-600" />
+              </div>
+              <div>
+                <p className="text-xl lg:text-2xl font-bold text-gray-800">{stats.totalTests}</p>
+                <p className="text-xs lg:text-sm text-gray-500">Tests Taken</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-5 flex items-center gap-3 lg:gap-4">
+              <div className="bg-orange-100 p-2 lg:p-3 rounded-lg">
+                <HiOutlineCheckCircle className="text-xl lg:text-2xl text-orange-600" />
+              </div>
+              <div>
+                <p className="text-xl lg:text-2xl font-bold text-gray-800">{accuracyData[0].value}%</p>
+                <p className="text-xs lg:text-sm text-gray-500">Accuracy</p>
+              </div>
+            </div>
           </div>
-        ) : (
-          <>
-            {/* Overview Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex items-center gap-4">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <HiOutlineAcademicCap className="text-2xl text-[#3475d9]" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-800">{stats.avgScore}%</p>
-                  <p className="text-sm text-gray-500">Avg. Score</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex items-center gap-4">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <HiOutlineTrendingUp className="text-2xl text-green-600" />
-                </div>
-                <div>
-                  <p className={`text-2xl font-bold ${improvement >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {improvement >= 0 ? '+' : ''}{improvement}%
-                  </p>
-                  <p className="text-sm text-gray-500">Improvement</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex items-center gap-4">
-                <div className="bg-purple-100 p-3 rounded-lg">
-                  <HiOutlineClipboardList className="text-2xl text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-800">{stats.totalTests}</p>
-                  <p className="text-sm text-gray-500">Tests Taken</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex items-center gap-4">
-                <div className="bg-orange-100 p-3 rounded-lg">
-                  <HiOutlineCheckCircle className="text-2xl text-orange-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-800">{accuracyData[0].value}%</p>
-                  <p className="text-sm text-gray-500">Accuracy</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              {/* Performance Trend */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-800 mb-4">Score Trend</h2>
-                <ResponsiveContainer width="100%" height={280}>
-                  <LineChart data={stats.performanceTrend}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="test" tick={{ fontSize: 12 }} />
-                    <YAxis domain={[0, 100]} />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-lg">
-                              <p className="font-semibold text-gray-800">{payload[0].payload.testName}</p>
-                              <p className="text-blue-600">Score: {payload[0].value}%</p>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="score"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                      dot={{ r: 4 }}
-                      activeDot={{ r: 6 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* Accuracy Pie Chart */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-800 mb-4">Overall Accuracy</h2>
-                <ResponsiveContainer width="100%" height={280}>
-                  <PieChart>
-                    <Pie
-                      data={accuracyData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={3}
-                      dataKey="value"
-                      label={({ name, value }) => `${name}: ${value}%`}
-                    >
-                      {accuracyData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Legend />
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Test-wise Scores */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-800 mb-4">Recent Test Scores</h2>
-              <ResponsiveContainer width="100%" height={320}>
-                <BarChart data={testScores} layout="vertical" margin={{ left: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis type="number" domain={[0, 100]} />
-                  <YAxis type="category" dataKey="test" tick={{ fontSize: 13 }} width={130} />
-                  <Tooltip />
-                  <Bar dataKey="score" fill="#3b82f6" radius={[0, 6, 6, 0]} barSize={20} />
-                </BarChart>
+          {/* Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8">
+            {/* Performance Trend */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
+              <h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">Score Trend</h2>
+              <ResponsiveContainer width="100%" height={220}>
+                <LineChart data={stats.performanceTrend}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="test" tick={{ fontSize: 10 }} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div className="bg-white border border-gray-200 rounded-lg p-2 lg:p-3 shadow-lg">
+                            <p className="font-semibold text-gray-800 text-sm">{payload[0].payload.testName}</p>
+                            <p className="text-blue-600 text-sm">Score: {payload[0].value}%</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="score"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                </LineChart>
               </ResponsiveContainer>
             </div>
-          </>
-        )}
-      </main>
-    </div>
+
+            {/* Accuracy Pie Chart */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
+              <h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">Overall Accuracy</h2>
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie
+                    data={accuracyData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={70}
+                    paddingAngle={3}
+                    dataKey="value"
+                    label={({ name, value }) => `${value}%`}
+                  >
+                    {accuracyData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Test-wise Scores */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
+            <h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">Recent Test Scores</h2>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={testScores} layout="vertical" margin={{ left: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="test" tick={{ fontSize: 10 }} width={100} />
+                <Tooltip />
+                <Bar dataKey="score" fill="#3b82f6" radius={[0, 6, 6, 0]} barSize={16} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </>
+      )}
+    </DashboardLayout>
   );
 }
 
