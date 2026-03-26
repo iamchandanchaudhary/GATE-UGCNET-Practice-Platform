@@ -118,7 +118,7 @@ const TestListPage = () => {
 
   const formatDuration = (minutes) => {
     if (minutes === 60) return "1 Hour";
-    return `${minutes} Minutes`;
+    return `${minutes} Min`;
   };
 
   const formatDate = (dateString) => {
@@ -132,106 +132,112 @@ const TestListPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-gray-600 text-xl">Loading tests...</div>
+        <div className="text-gray-600 text-lg sm:text-xl">Loading tests...</div>
       </div>
     );
   }
 
   return (
     <>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center justify-between mb-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Test List</h1>
-            <p className="text-gray-500 text-sm mt-1">Manage all your tests</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Test List</h1>
+            <p className="text-gray-500 text-xs sm:text-sm mt-1">Manage all your tests</p>
           </div>
           <Link
             to="/add-test"
-            className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-lg transition"
+            className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-lg transition text-sm text-center"
           >
             + Add New Test
           </Link>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm">
             {error}
           </div>
         )}
 
         {tests.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-sm">
-            <FaQuestionCircle className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">No Tests Found</h2>
-            <p className="text-gray-500 mb-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
+            <FaQuestionCircle className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Tests Found</h2>
+            <p className="text-gray-500 mb-6 text-sm sm:text-base">
               You haven&apos;t created any tests yet.
             </p>
             <Link
               to="/add-test"
-              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition"
+              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
             >
               Create Your First Test
             </Link>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {tests.map((test) => (
               <div
                 key={test._id}
-                className="bg-white border border-gray-200 rounded-xl p-6 flex items-center justify-between hover:border-[#3475d9] hover:shadow-sm transition shadow-sm"
+                className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:border-[#3475d9] hover:shadow-sm transition shadow-sm"
               >
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {test.name}
-                  </h3>
-                  <div className="flex items-center gap-6 text-gray-500">
-                    <span className="flex items-center gap-2">
-                      <FaClock className="text-[#3475d9]" />
-                      {formatDuration(test.duration)}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <FaQuestionCircle className="text-[#3475d9]" />
-                      {test.numberOfQuestions} Questions
-                    </span>
-                    <span className="text-sm">
-                      Created: {formatDate(test.createdAt)}
-                    </span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start sm:items-center gap-2 mb-2">
+                      <h3 className="text-base sm:text-xl font-bold text-gray-800 truncate">
+                        {test.name}
+                      </h3>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs border shrink-0 ${test.isActive
+                            ? "bg-green-50 text-green-600 border-green-200"
+                            : "bg-red-50 text-red-600 border-red-200"
+                          }`}
+                      >
+                        {test.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-gray-500 text-xs sm:text-sm">
+                      <span className="flex items-center gap-1 sm:gap-2">
+                        <FaClock className="text-[#3475d9]" />
+                        {formatDuration(test.duration)}
+                      </span>
+                      <span className="flex items-center gap-1 sm:gap-2">
+                        <FaQuestionCircle className="text-[#3475d9]" />
+                        {test.numberOfQuestions} Q
+                      </span>
+                      <span className="hidden sm:inline">
+                        Created: {formatDate(test.createdAt)}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm border ${test.isActive
-                        ? "bg-green-50 text-green-600 border-green-200"
-                        : "bg-red-50 text-red-600 border-red-200"
-                      }`}
-                  >
-                    {test.isActive ? "Active" : "Inactive"}
-                  </span>
+                  <div className="flex items-center gap-2 sm:gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                    <button
+                      onClick={() => handleView(test._id)}
+                      className="flex-1 sm:flex-none p-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200 flex items-center justify-center gap-1"
+                      title="View"
+                    >
+                      <FaEye />
+                      <span className="sm:hidden text-xs">View</span>
+                    </button>
 
-                  <button
-                    onClick={() => handleView(test._id)}
-                    className="p-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
-                    title="View"
-                  >
-                    <FaEye />
-                  </button>
+                    <button
+                      onClick={() => handleEdit(test._id)}
+                      className="flex-1 sm:flex-none p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition border border-yellow-200 flex items-center justify-center gap-1"
+                      title="Edit"
+                    >
+                      <FaEdit />
+                      <span className="sm:hidden text-xs">Edit</span>
+                    </button>
 
-                  <button
-                    onClick={() => handleEdit(test._id)}
-                    className="p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition border border-yellow-200"
-                    title="Edit"
-                  >
-                    <FaEdit />
-                  </button>
-
-                  <button
-                    onClick={() => setDeleteModal({ open: true, test })}
-                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
-                    title="Delete"
-                  >
-                    <FaTrash />
-                  </button>
+                    <button
+                      onClick={() => setDeleteModal({ open: true, test })}
+                      className="flex-1 sm:flex-none p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 flex items-center justify-center gap-1"
+                      title="Delete"
+                    >
+                      <FaTrash />
+                      <span className="sm:hidden text-xs">Delete</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -265,22 +271,22 @@ const TestListPage = () => {
       {/* Delete Modal */}
       {deleteModal.open && deleteModal.test && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-md w-full shadow-xl">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Delete Test</h2>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 max-w-md w-full shadow-xl">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Delete Test</h2>
+            <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
               Are you sure you want to delete &quot;{deleteModal.test.name}&quot;?
               This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-3 sm:gap-4">
               <button
                 onClick={() => setDeleteModal({ open: false, test: null })}
-                className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+                className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm"
               >
                 Delete
               </button>
@@ -295,44 +301,44 @@ const TestListPage = () => {
 // View Modal Component
 const ViewModal = ({ test, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
       <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">{test.name}</h2>
+        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-800 truncate pr-4">{test.name}</h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-500 hover:text-gray-700 transition"
+            className="p-2 text-gray-500 hover:text-gray-700 transition shrink-0"
           >
             <FaTimes className="text-xl" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1">
-          <div className="flex gap-6 mb-6">
-            <span className="bg-blue-50 text-[#3475d9] px-4 py-2 rounded-lg flex items-center gap-2 border border-blue-200">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+          <div className="flex flex-wrap gap-3 sm:gap-6 mb-4 sm:mb-6">
+            <span className="bg-blue-50 text-[#3475d9] px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 border border-blue-200 text-sm">
               <FaClock />
-              {test.duration === 60 ? "1 Hour" : `${test.duration} Minutes`}
+              {test.duration === 60 ? "1 Hour" : `${test.duration} Min`}
             </span>
-            <span className="bg-green-50 text-green-600 px-4 py-2 rounded-lg flex items-center gap-2 border border-green-200">
+            <span className="bg-green-50 text-green-600 px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 border border-green-200 text-sm">
               <FaQuestionCircle />
               {test.numberOfQuestions} Questions
             </span>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {test.questions.map((q, index) => (
               <div
                 key={index}
-                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200"
               >
-                <h4 className="text-gray-800 font-medium mb-3">
+                <h4 className="text-gray-800 font-medium mb-3 text-sm sm:text-base">
                   Q{index + 1}. {q.questionText}
                 </h4>
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {q.options.map((opt, oIndex) => (
                     <div
                       key={oIndex}
-                      className={`p-2 rounded flex items-center gap-2 ${q.correctAnswer === oIndex
+                      className={`p-2 rounded flex items-center gap-2 text-sm ${q.correctAnswer === oIndex
                           ? "bg-green-50 text-green-700 border border-green-200"
                           : "bg-white text-gray-600 border border-gray-200"
                         }`}
@@ -340,9 +346,9 @@ const ViewModal = ({ test, onClose }) => {
                       <span className="font-bold">
                         {String.fromCharCode(65 + oIndex)}.
                       </span>
-                      {opt}
+                      <span className="flex-1">{opt}</span>
                       {q.correctAnswer === oIndex && (
-                        <FaCheck className="ml-auto text-green-600" />
+                        <FaCheck className="text-green-600 shrink-0" />
                       )}
                     </div>
                   ))}
@@ -355,7 +361,7 @@ const ViewModal = ({ test, onClose }) => {
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+            className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
           >
             Close
           </button>
@@ -430,10 +436,10 @@ const EditModal = ({ test, token, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
       <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">Edit Test</h2>
+        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-800">Edit Test</h2>
           <button
             onClick={onClose}
             className="p-2 text-gray-500 hover:text-gray-700 transition"
@@ -442,33 +448,33 @@ const EditModal = ({ test, token, onClose, onSave }) => {
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm">
               {error}
             </div>
           )}
 
-          <div className="grid md:grid-cols-3 gap-4 mb-6">
-            <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Test Name
               </label>
               <input
                 type="text"
                 value={testName}
                 onChange={(e) => setTestName(e.target.value)}
-                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
+                className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Duration
               </label>
               <select
                 value={duration}
                 onChange={(e) => setDuration(parseInt(e.target.value))}
-                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
+                className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
               >
                 <option value={10}>10 Minutes</option>
                 <option value={20}>20 Minutes</option>
@@ -477,13 +483,13 @@ const EditModal = ({ test, token, onClose, onSave }) => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Status
               </label>
               <select
                 value={isActive}
                 onChange={(e) => setIsActive(e.target.value === "true")}
-                className="w-full bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none"
+                className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
               >
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
@@ -491,31 +497,31 @@ const EditModal = ({ test, token, onClose, onSave }) => {
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Questions</h3>
-          <div className="space-y-4">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Questions</h3>
+          <div className="space-y-3 sm:space-y-4">
             {questions.map((q, qIndex) => (
               <div
                 key={qIndex}
-                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200"
               >
-                <div className="mb-3">
-                  <label className="block text-gray-700 text-sm mb-1">
+                <div className="mb-2 sm:mb-3">
+                  <label className="block text-gray-700 text-xs sm:text-sm mb-1">
                     Question {qIndex + 1}
                   </label>
                   <textarea
                     value={q.questionText}
                     onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
-                    className="w-full bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none resize-none"
+                    className="w-full bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none resize-none text-sm"
                     rows={2}
                   />
                 </div>
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {q.options.map((opt, oIndex) => (
                     <div key={oIndex} className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => handleCorrectAnswerChange(qIndex, oIndex)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${q.correctAnswer === oIndex
+                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm shrink-0 ${q.correctAnswer === oIndex
                             ? "bg-green-600 text-white"
                             : "bg-gray-200 text-gray-500"
                           }`}
@@ -528,7 +534,7 @@ const EditModal = ({ test, token, onClose, onSave }) => {
                         onChange={(e) =>
                           handleOptionChange(qIndex, oIndex, e.target.value)
                         }
-                        className="flex-1 bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none"
+                        className="flex-1 bg-white text-gray-800 px-3 py-2 rounded border border-gray-300 focus:border-[#3475d9] outline-none text-sm min-w-0"
                       />
                     </div>
                   ))}
@@ -538,17 +544,17 @@ const EditModal = ({ test, token, onClose, onSave }) => {
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200 flex justify-end gap-4">
+        <div className="p-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+            className="px-4 sm:px-6 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="px-6 py-2 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300"
+            className="px-4 sm:px-6 py-2 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300 text-sm"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

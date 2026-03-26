@@ -29,14 +29,14 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-blue-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#3475d9] mb-4">
-            <FaGraduationCap className="text-white text-2xl" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-blue-50 px-4 py-8">
+      <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#3475d9] mb-3 sm:mb-4">
+            <FaGraduationCap className="text-white text-xl sm:text-2xl" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800">Admin Login</h1>
-          <p className="text-gray-500 mt-2">GATE & UGC-NET Practice Platform</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Admin Login</h1>
+          <p className="text-gray-500 mt-2 text-sm sm:text-base">GATE & UGC-NET Practice Platform</p>
         </div>
 
         {error && (
