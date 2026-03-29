@@ -4,7 +4,7 @@ import heroImg from "../assets/hero-img.png";
 import { useAuth } from '../context/AuthContext';
 
 const HeroSection = () => {
-  const { user } = useAuth();
+  const { user, scrollUp } = useAuth();
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden">
@@ -21,10 +21,12 @@ const HeroSection = () => {
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
               <Link
                 to={user ? '/dashboard' : '/login'}
+                onClick={scrollUp}
                 className="px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white bg-[#3475d9] rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-lg shadow-blue-200 text-center"
               >
                 Start Practicing
               </Link>
+
               <Link
                 to="/learning"
                 className="px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:text-[#3475d9] transition-colors duration-200 text-center"
@@ -36,15 +38,9 @@ const HeroSection = () => {
 
           {/* Right Illustration */}
           <div className="flex-1 flex justify-center">
-            {/* <div className="relative w-full max-w-lg"> */}
-              {/* Decorative background elements */}
-              {/* <div className="absolute -top-4 -right-4 w-72 h-72 bg-blue-100 rounded-full opacity-40 blur-3xl"></div>
-              <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-blue-200 rounded-full opacity-30 blur-3xl"></div> */}
-
               <div className="w-full h-auto relative z-10">
                 <img src={heroImg} alt="" />
               </div>
-            {/* </div> */}
           </div>
         </div>
       </div>

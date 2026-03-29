@@ -19,7 +19,7 @@ const sidebarItems = [
 function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, scrollUp } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -64,7 +64,7 @@ function Sidebar({ isOpen, onClose }) {
               <Link
                 key={item.label}
                 to={item.path}
-                onClick={handleNavClick}
+                onClick={() => {handleNavClick(); scrollUp()}}
                 className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-150 ${
                   isActive
                     ? 'text-[#3475d9] bg-blue-50 border-r-3 border-[#3475d9]'
@@ -82,7 +82,7 @@ function Sidebar({ isOpen, onClose }) {
         <div className="border-t border-gray-200 py-4">
           <Link
             to="/profile"
-            onClick={handleNavClick}
+            onClick={() => {handleNavClick(); scrollUp()}}
             className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-150 ${
               location.pathname === '/profile'
                 ? 'text-[#3475d9] bg-blue-50 border-r-3 border-[#3475d9]'

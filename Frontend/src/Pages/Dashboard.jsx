@@ -24,7 +24,7 @@ import DashboardLayout from '../components/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 
 function Dashboard() {
-  const { user } = useAuth();
+  const { user, scrollUp } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -95,6 +95,7 @@ function Dashboard() {
         </div>
         <Link
           to="/start-test"
+          onClick={scrollUp}
           className="flex items-center justify-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base"
         >
           <HiOutlinePlay className="text-lg" />

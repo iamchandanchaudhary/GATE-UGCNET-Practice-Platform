@@ -9,6 +9,7 @@ import {
   HiX,
 } from 'react-icons/hi';
 import DashboardLayout from '../components/DashboardLayout';
+import { useAuth } from '../context/AuthContext';
 
 function StartTestPage() {
   const [tests, setTests] = useState([]);
@@ -17,6 +18,8 @@ function StartTestPage() {
   const [selectedTest, setSelectedTest] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
+
+  const { scrollUp } = useAuth();
 
   useEffect(() => {
     fetchTests();
@@ -139,7 +142,7 @@ function StartTestPage() {
 
       {/* Confirmation Modal */}
       {showConfirm && selectedTest && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             {/* Modal Header */}
             <div className="bg-[#3475d9] px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
@@ -194,7 +197,7 @@ function StartTestPage() {
                 Cancel
               </button>
               <button
-                onClick={handleConfirm}
+                onClick={() => { handleConfirm(); scrollUp()}}
                 className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-[#3475d9] text-white font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer text-sm"
               >
                 <HiOutlinePlay className="text-lg" />

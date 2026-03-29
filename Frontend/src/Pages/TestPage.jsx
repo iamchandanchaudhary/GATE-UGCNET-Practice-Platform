@@ -13,7 +13,7 @@ import { useAuth } from '../context/AuthContext';
 function TestPage() {
   const navigate = useNavigate();
   const { testId } = useParams();
-  const { user } = useAuth();
+  const { user, scrollUp } = useAuth();
 
   const [test, setTest] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -161,7 +161,8 @@ function TestPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-3 lg:px-6 py-2 lg:py-3 flex items-center justify-between sticky top-0 z-30">
+      <header className="bg-white border-b border-gray-200 px-3 lg:px-6 py-2 lg:py-3 flex items-center justify-between fixed top-16 w-full z-30">
+        
         <div className="flex items-center gap-2 lg:gap-4">
           {/* Mobile Question Nav Toggle */}
           <button
@@ -179,6 +180,7 @@ function TestPage() {
             </p>
           </div>
         </div>
+        
         <div className="flex items-center gap-2 lg:gap-6">
           {/* Timer */}
           <div
@@ -203,7 +205,7 @@ function TestPage() {
 
       <div className="flex flex-1">
         {/* Question Navigation Panel - Desktop */}
-        <aside className="hidden lg:block w-56 bg-white border-r border-gray-200 p-4 fixed top-[61px] bottom-0 left-0 overflow-y-auto">
+        <aside className="hidden lg:block w-56 pt-24 bg-white border-r border-gray-200 p-4 fixed top-[61px] bottom-0 left-0 overflow-y-auto">
           <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">
             Questions
           </h3>
@@ -241,7 +243,7 @@ function TestPage() {
         </aside>
 
         {/* Main Question Area */}
-        <main className="flex-1 p-4 lg:p-8 lg:ml-56">
+        <main className="flex-1 p-4 lg:p-8 lg:ml-56 mt-20">
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-8">
               {/* Question */}
@@ -401,7 +403,7 @@ function TestPage() {
 
       {/* Submit Confirmation Modal */}
       {showSubmitConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div className="bg-green-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
               <h3 className="text-base lg:text-lg font-bold text-white">Submit Test</h3>
@@ -440,7 +442,7 @@ function TestPage() {
                 Go Back
               </button>
               <button
-                onClick={handleFinish}
+                onClick={() => {handleFinish(); scrollUp()}}
                 disabled={isSubmitting}
                 className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer disabled:bg-green-400 text-sm"
               >
