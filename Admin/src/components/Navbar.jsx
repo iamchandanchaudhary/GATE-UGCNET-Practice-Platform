@@ -32,7 +32,7 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Nav Links */}
-                    <div className="hidden lg:flex items-center gap-2">
+                    {/* <div className="hidden lg:flex items-center gap-2">
                         <NavLink to="/dashboard" className={navLinkClass}>
                             <FaHome className="text-sm" />
                             Dashboard
@@ -49,7 +49,7 @@ const Navbar = () => {
                             <FaUsers className="text-sm" />
                             Users
                         </NavLink>
-                    </div>
+                    </div> */}
 
                     {/* Right Side */}
                     <div className="flex items-center gap-2 sm:gap-4">

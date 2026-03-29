@@ -19,7 +19,7 @@ const Dashboard = () => {
           className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-5 sm:p-8 hover:border-[#3475d9] hover:shadow-lg transition duration-300 group"
         >
           <div className="flex flex-row sm:flex-col items-center sm:text-center gap-4 sm:gap-0">
-            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-[#3475d9] rounded-full flex items-center justify-center sm:mb-6 group-hover:scale-110 transition shrink-0">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-[#3475d9] rounded-full flex items-center justify-center sm:mb-6 transition shrink-0">
               <FaPlus className="text-white text-xl sm:text-3xl" />
             </div>
             <div>
@@ -37,7 +37,7 @@ const Dashboard = () => {
           className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-5 sm:p-8 hover:border-green-500 hover:shadow-lg transition duration-300 group"
         >
           <div className="flex flex-row sm:flex-col items-center sm:text-center gap-4 sm:gap-0">
-            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-green-600 rounded-full flex items-center justify-center sm:mb-6 group-hover:scale-110 transition shrink-0">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-green-600 rounded-full flex items-center justify-center sm:mb-6 transition shrink-0">
               <FaList className="text-white text-xl sm:text-3xl" />
             </div>
             <div>
@@ -55,7 +55,7 @@ const Dashboard = () => {
           className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-5 sm:p-8 hover:border-purple-500 hover:shadow-lg transition duration-300 group sm:col-span-2 lg:col-span-1"
         >
           <div className="flex flex-row sm:flex-col items-center sm:text-center gap-4 sm:gap-0">
-            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-purple-600 rounded-full flex items-center justify-center sm:mb-6 group-hover:scale-110 transition shrink-0">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-purple-600 rounded-full flex items-center justify-center sm:mb-6 transition shrink-0">
               <FaUsers className="text-white text-xl sm:text-3xl" />
             </div>
             <div>

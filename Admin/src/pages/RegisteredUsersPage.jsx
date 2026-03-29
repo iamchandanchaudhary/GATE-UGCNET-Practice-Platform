@@ -337,7 +337,7 @@ const RegisteredUsersPage = () => {
       {/* Details Modal */}
       {detailsModal.open && detailsModal.user && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
+          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-3xl px-4 overflow-hidden shadow-xl">
             <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800">User Details</h2>
               <button
@@ -348,14 +348,14 @@ const RegisteredUsersPage = () => {
               </button>
             </div>
 
-            <div className="p-4 sm:p-6">
+            <div className="p-2 sm:p-6">
               <div className="flex justify-center mb-4 sm:mb-6">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#3475d9] rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                   {detailsModal.user.name?.charAt(0).toUpperCase() || "U"}
                 </div>
               </div>
 
-              <div className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 space-y-3 sm:space-y-4 gap-0 sm:gap-4">
                 <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
                   <FaUser className="text-[#3475d9] text-lg shrink-0" />
                   <div className="min-w-0">
@@ -402,7 +402,7 @@ const RegisteredUsersPage = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200 mb-0 sm:mb-4">
                   <FaCalendarAlt className="text-purple-600 text-lg shrink-0" />
                   <div>
                     <p className="text-gray-500 text-xs sm:text-sm">Registered On</p>
