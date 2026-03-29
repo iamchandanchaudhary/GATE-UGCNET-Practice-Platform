@@ -20,6 +20,26 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 6,
     },
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    college: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    exam: {
+      type: String,
+      trim: true,
+      default: "GATE CS",
+    },
+    year: {
+      type: String,
+      trim: true,
+      default: "2026",
+    },
   },
   { timestamps: true }
 );
