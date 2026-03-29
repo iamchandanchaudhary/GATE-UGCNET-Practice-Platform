@@ -8,12 +8,20 @@ const AddTestPage = () => {
   const navigate = useNavigate();
 
   const [testName, setTestName] = useState("");
+  const [subject, setSubject] = useState("");
   const [duration, setDuration] = useState("");
   const [numberOfQuestions, setNumberOfQuestions] = useState("");
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const subjectOptions = [
+    { value: "Computer Science", label: "Computer Science" },
+    { value: "General Aptitude", label: "General Aptitude" },
+    { value: "Computer Science & Applications", label: "Computer Science & Applications" },
+    { value: "Mathematics", label: "Mathematics" },
+  ];
 
   const durationOptions = [
     { value: 10, label: "10 Minutes" },
@@ -63,6 +71,10 @@ const AddTestPage = () => {
   const validateForm = () => {
     if (!testName.trim()) {
       setError("Test name is required");
+      return false;
+    }
+    if (!subject) {
+      setError("Subject is required");
       return false;
     }
     if (!duration) {
@@ -115,6 +127,7 @@ const AddTestPage = () => {
           },
           body: JSON.stringify({
             name: testName,
+            subject: subject,
             duration: parseInt(duration),
             numberOfQuestions: parseInt(numberOfQuestions),
             questions: questions.map((q) => ({
@@ -168,8 +181,8 @@ const AddTestPage = () => {
         <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
           <h2 className="text-base sm:text-lg font-bold text-gray-800 mb-4 sm:mb-6">Test Configuration</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="sm:col-span-2 lg:col-span-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div>
               <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Test Name
               </label>
@@ -180,6 +193,24 @@ const AddTestPage = () => {
                 className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm"
                 placeholder="e.g., GATE CS Mock Test 1"
               />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+                Subject
+              </label>
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-gray-300 focus:border-[#3475d9] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm"
+              >
+                <option value="">Select Subject</option>
+                {subjectOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

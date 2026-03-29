@@ -3,9 +3,9 @@ const TestResult = require("../models/TestResult");
 
 const createTest = async (req, res) => {
   try {
-    const { name, duration, numberOfQuestions, questions } = req.body;
+    const { name, subject, duration, numberOfQuestions, questions } = req.body;
 
-    if (!name || !duration || !numberOfQuestions || !questions) {
+    if (!name || !subject || !duration || !numberOfQuestions || !questions) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -21,6 +21,7 @@ const createTest = async (req, res) => {
 
     const test = new Test({
       name,
+      subject,
       duration,
       numberOfQuestions,
       questions,
@@ -89,7 +90,7 @@ const getTestById = async (req, res) => {
 const updateTest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, duration, numberOfQuestions, questions, isActive } = req.body;
+    const { name, subject, duration, numberOfQuestions, questions, isActive } = req.body;
 
     const test = await Test.findById(id);
 
@@ -101,6 +102,7 @@ const updateTest = async (req, res) => {
     }
 
     if (name) test.name = name;
+    if (subject) test.subject = subject;
     if (duration) test.duration = duration;
     if (numberOfQuestions) test.numberOfQuestions = numberOfQuestions;
     if (questions) test.questions = questions;

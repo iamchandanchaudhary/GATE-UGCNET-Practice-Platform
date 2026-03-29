@@ -31,6 +31,12 @@ const testSchema = new mongoose.Schema(
       required: [true, "Test name is required"],
       trim: true,
     },
+    subject: {
+      type: String,
+      required: [true, "Subject is required"],
+      enum: ["Computer Science", "General Aptitude", "Computer Science & Applications", "Mathematics"],
+      trim: true,
+    },
     duration: {
       type: Number,
       required: [true, "Duration is required"],
