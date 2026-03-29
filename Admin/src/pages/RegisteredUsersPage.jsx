@@ -11,6 +11,10 @@ import {
   FaCheckCircle,
   FaTimesCircle,
   FaClock,
+  FaTrash,
+  FaPhone,
+  FaUniversity,
+  FaGraduationCap,
 } from "react-icons/fa";
 
 const RegisteredUsersPage = () => {
@@ -25,6 +29,11 @@ const RegisteredUsersPage = () => {
     user: null,
     performance: null,
     loading: false,
+  });
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    user: null,
+    deleting: false,
   });
 
   const fetchUsers = async () => {
@@ -94,6 +103,43 @@ const RegisteredUsersPage = () => {
         ...prev,
         loading: false,
       }));
+    }
+  };
+
+  const handleDeleteClick = (user) => {
+    setDeleteModal({ open: true, user, deleting: false });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteModal.user) return;
+
+    setDeleteModal((prev) => ({ ...prev, deleting: true }));
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${deleteModal.user._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Remove user from list
+        setUsers((prev) => prev.filter((u) => u._id !== deleteModal.user._id));
+        setDeleteModal({ open: false, user: null, deleting: false });
+      } else {
+        setError(data.message || "Failed to delete user");
+        setDeleteModal((prev) => ({ ...prev, deleting: false }));
+      }
+    } catch (error) {
+      console.error("Delete user error:", error);
+      setError("Connection error. Please try again.");
+      setDeleteModal((prev) => ({ ...prev, deleting: false }));
     }
   };
 
@@ -219,6 +265,14 @@ const RegisteredUsersPage = () => {
                               <FaChartLine />
                               <span className="text-sm">Performance</span>
                             </button>
+                            <button
+                              onClick={() => handleDeleteClick(user)}
+                              className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
+                              title="Delete User"
+                            >
+                              <FaTrash />
+                              <span className="text-sm">Delete</span>
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -266,6 +320,12 @@ const RegisteredUsersPage = () => {
                       <FaChartLine />
                       Performance
                     </button>
+                    <button
+                      onClick={() => handleDeleteClick(user)}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 text-sm"
+                    >
+                      <FaTrash />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -309,6 +369,36 @@ const RegisteredUsersPage = () => {
                   <div className="min-w-0">
                     <p className="text-gray-500 text-xs sm:text-sm">Email Address</p>
                     <p className="text-gray-800 font-medium text-sm sm:text-base truncate">{detailsModal.user.email}</p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaPhone className="text-blue-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Phone Number</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.phone || "Not provided"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaUniversity className="text-indigo-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">College / University</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.college || "Not provided"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaGraduationCap className="text-orange-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Target Exam & Year</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.exam || "GATE CS"} - {detailsModal.user.year || "2026"}
+                    </p>
                   </div>
                 </div>
 
@@ -460,6 +550,59 @@ const RegisteredUsersPage = () => {
                 className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.open && deleteModal.user && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
+            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">Delete User</h2>
+              <button
+                onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
+                className="p-2 text-gray-500 hover:text-gray-700 transition"
+                disabled={deleteModal.deleting}
+              >
+                <FaTimes className="text-xl" />
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-6">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <FaTrash className="text-2xl text-red-600" />
+                </div>
+              </div>
+
+              <p className="text-center text-gray-600 mb-2">
+                Are you sure you want to delete this user?
+              </p>
+              <p className="text-center font-semibold text-gray-800 mb-4">
+                {deleteModal.user.name} ({deleteModal.user.email})
+              </p>
+              <p className="text-center text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+                This action cannot be undone. All user data including test results will be permanently deleted.
+              </p>
+            </div>
+
+            <div className="p-4 border-t border-gray-200 flex gap-3">
+              <button
+                onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
+                disabled={deleteModal.deleting}
+                className="flex-1 py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleteModal.deleting}
+                className="flex-1 py-2.5 sm:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm disabled:opacity-50"
+              >
+                {deleteModal.deleting ? "Deleting..." : "Delete User"}
               </button>
             </div>
           </div>
