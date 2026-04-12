@@ -190,7 +190,7 @@ const TestListPage = () => {
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <FaFilter className="text-gray-500 text-sm" />
+              {/* <FaFilter className="text-gray-500 text-sm" /> */}
               <select
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
