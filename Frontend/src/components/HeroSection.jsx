@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import heroImg from "../assets/hero-img.png";
+import heroImg from "../assets/hero-img.webp";
 import { useAuth } from '../context/AuthContext';
 
 const HeroSection = () => {
   const { user, scrollUp } = useAuth();
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden">
+    <section className="relative bg-linear-to-r from-[#bbdcfc]/60 via-[#e9e4fc]/60 to-[#d6d6fe]/60 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-4 mt-6 sm:mt-10">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Left Content */}

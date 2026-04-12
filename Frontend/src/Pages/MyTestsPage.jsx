@@ -220,6 +220,7 @@ function MyTestsPage() {
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-800 text-sm">{test.testName}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">{formatDate(test.createdAt)}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Subject: {test.subject || 'Unknown'}</p>
                   </div>
                   <StatusBadge status="completed" />
                 </div>

@@ -162,7 +162,7 @@ function StartTestPage() {
           {filteredTests.map((test) => (
             <div
               key={test._id}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200"
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 hover:border-blue-300 transition-all duration-200"
             >
               <div className="flex items-center gap-3 mb-3 lg:mb-4">
                 <div className="bg-blue-100 p-2 lg:p-3 rounded-lg">

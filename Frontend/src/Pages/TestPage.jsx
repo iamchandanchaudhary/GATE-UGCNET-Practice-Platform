@@ -568,7 +568,7 @@ function TestPage() {
               <button
                 onClick={() => {handleFinish(); scrollUp()}}
                 disabled={isSubmitting}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-green-400 text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-blue-400 text-sm"
               >
                 {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
               </button>
