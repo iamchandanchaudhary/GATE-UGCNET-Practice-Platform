@@ -27,6 +27,9 @@ function TestPage() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showQuestionNav, setShowQuestionNav] = useState(false);
+  const [isTestActive, setIsTestActive] = useState(false);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const [pendingLeavePath, setPendingLeavePath] = useState(null);
 
   useEffect(() => {
     fetchTest();
@@ -46,6 +49,7 @@ function TestPage() {
         const duration = data.test.duration * 60;
         setTimeLeft(duration);
         setTotalTime(duration);
+        setIsTestActive(true);
       } else {
         setError(data.message || 'Failed to load test');
       }
@@ -86,6 +90,7 @@ function TestPage() {
       const data = await response.json();
 
       if (data.success) {
+        setIsTestActive(false);
         sessionStorage.setItem('testResult', JSON.stringify(data.result));
         navigate('/test-report', { replace: true });
       } else {
@@ -98,6 +103,87 @@ function TestPage() {
       setIsSubmitting(false);
     }
   }, [selected, timeLeft, totalTime, testId, navigate, isSubmitting, user]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (!isTestActive || isSubmitting) return;
+
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isTestActive, isSubmitting]);
+
+  useEffect(() => {
+    if (!isTestActive || isSubmitting) return;
+
+    const handlePopState = () => {
+      window.history.pushState(null, '', window.location.href);
+      setPendingLeavePath('@@BACK@@');
+      setShowLeaveConfirm(true);
+    };
+
+    const handleDocumentClick = (event) => {
+      const anchor = event.target.closest('a[href]');
+      if (!anchor) return;
+
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+        return;
+      }
+
+      const url = new URL(href, window.location.origin);
+      const nextPath = `${url.pathname}${url.search}${url.hash}`;
+      const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+      if (nextPath === currentPath || url.origin !== window.location.origin) return;
+
+      event.preventDefault();
+      setPendingLeavePath(nextPath);
+      setShowLeaveConfirm(true);
+    };
+
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePopState);
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [isTestActive, isSubmitting]);
+
+  const handleLeaveTest = () => {
+    setIsTestActive(false);
+    setShowLeaveConfirm(false);
+    setShowSubmitConfirm(false);
+    setShowQuestionNav(false);
+
+    if (pendingLeavePath === '@@BACK@@') {
+      navigate(-1);
+      return;
+    }
+
+    if (pendingLeavePath) {
+      navigate(pendingLeavePath);
+      return;
+    }
+
+    navigate('/start-test', { replace: true });
+  };
+
+  const handleExitQuizClick = () => {
+    if (isSubmitting) return;
+    setPendingLeavePath('/start-test');
+    setShowLeaveConfirm(true);
+  };
+
+  const handleStayInTest = () => {
+    setShowLeaveConfirm(false);
+    setPendingLeavePath(null);
+  };
 
   // Timer
   useEffect(() => {
@@ -194,6 +280,13 @@ function TestPage() {
             {formatTime(timeLeft)}
           </div>
           <button
+            onClick={handleExitQuizClick}
+            disabled={isSubmitting}
+            className="hidden sm:block border border-red-300 text-red-600 hover:bg-red-50 font-semibold px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-60 text-sm lg:text-base"
+          >
+            Exit Quiz
+          </button>
+          <button
             onClick={() => setShowSubmitConfirm(true)}
             disabled={isSubmitting}
             className="hidden sm:block bg-green-600 hover:bg-green-700 text-white font-semibold px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
@@ -214,7 +307,7 @@ function TestPage() {
               <button
                 key={i}
                 onClick={() => setCurrentQ(i)}
-                className={`w-9 h-9 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                className={`w-9 h-9 rounded-sm text-sm font-semibold transition-colors cursor-pointer ${
                   currentQ === i
                     ? 'bg-[#3475d9] text-white'
                     : selected[i] !== null
@@ -389,6 +482,14 @@ function TestPage() {
             </div>
 
             <button
+              onClick={handleExitQuizClick}
+              disabled={isSubmitting}
+              className="w-full mt-4 border border-red-300 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-lg transition-colors disabled:opacity-60"
+            >
+              Exit Quiz
+            </button>
+
+            <button
               onClick={() => {
                 setShowQuestionNav(false);
                 setShowSubmitConfirm(true);
@@ -404,8 +505,8 @@ function TestPage() {
       {/* Submit Confirmation Modal */}
       {showSubmitConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="bg-green-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-blue-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
               <h3 className="text-base lg:text-lg font-bold text-white">Submit Test</h3>
               <button
                 onClick={() => setShowSubmitConfirm(false)}
@@ -437,16 +538,62 @@ function TestPage() {
             <div className="px-4 lg:px-6 py-3 lg:py-4 bg-gray-50 flex items-center justify-end gap-3">
               <button
                 onClick={() => setShowSubmitConfirm(false)}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
               >
                 Go Back
               </button>
               <button
                 onClick={() => {handleFinish(); scrollUp()}}
                 disabled={isSubmitting}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors cursor-pointer disabled:bg-green-400 text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-green-400 text-sm"
               >
                 {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Leave Test Confirmation Modal */}
+      {showLeaveConfirm && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-red-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+              <h3 className="text-base lg:text-lg font-bold text-white">Leave Test?</h3>
+              <button
+                onClick={handleStayInTest}
+                className="text-white/80 hover:text-white transition-colors cursor-pointer"
+              >
+                <HiX className="text-xl" />
+              </button>
+            </div>
+            <div className="px-4 lg:px-6 py-4 lg:py-6">
+              <div className="flex items-start gap-3 lg:gap-4">
+                <div className="bg-red-100 p-2 rounded-full shrink-0 mt-0.5">
+                  <HiOutlineExclamationCircle className="text-xl lg:text-2xl text-red-600" />
+                </div>
+                <div>
+                  <p className="text-gray-800 font-medium mb-2 text-sm lg:text-base">
+                    Your test is still running.
+                  </p>
+                  <p className="text-xs lg:text-sm text-gray-600">
+                    If you leave now, this quiz will be closed and your current progress may be lost.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="px-4 lg:px-6 py-3 lg:py-4 bg-gray-50 flex items-center justify-end gap-3">
+              <button
+                onClick={handleStayInTest}
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
+              >
+                Continue Test
+              </button>
+              <button
+                onClick={handleLeaveTest}
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-red-600 text-white font-medium hover:bg-red-700 transition-colors cursor-pointer text-sm"
+              >
+                Yes, Leave
               </button>
             </div>
           </div>
