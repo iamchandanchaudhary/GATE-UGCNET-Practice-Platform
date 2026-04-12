@@ -14,6 +14,7 @@ import StartTestPage from './Pages/StartTestPage';
 import TestPage from './Pages/TestPage';
 import TestReportPage from './Pages/TestReportPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import "./App.css";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 

@@ -178,6 +178,7 @@ function MyTestsPage() {
                 <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
                   <tr>
                     <th className="px-6 py-3">Test Name</th>
+                    <th className="px-6 py-3">Subject</th>
                     <th className="px-6 py-3">Questions</th>
                     <th className="px-6 py-3">Score</th>
                     <th className="px-6 py-3">Correct</th>
@@ -190,6 +191,7 @@ function MyTestsPage() {
                   {testResults.map((test) => (
                     <tr key={test._id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4 font-medium text-gray-800">{test.testName}</td>
+                      <td className="px-6 py-4 text-gray-600">{test.subject || 'Unknown'}</td>
                       <td className="px-6 py-4 text-gray-600">{test.totalQuestions}</td>
                       <td className="px-6 py-4">
                         <span className={`font-semibold ${test.score >= 70 ? 'text-green-600' : test.score >= 40 ? 'text-yellow-600' : 'text-red-600'}`}>

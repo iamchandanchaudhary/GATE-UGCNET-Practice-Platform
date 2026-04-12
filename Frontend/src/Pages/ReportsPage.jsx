@@ -101,11 +101,13 @@ function ReportsPage() {
     ? stats.performanceTrend[stats.performanceTrend.length - 1].score - stats.performanceTrend[0].score
     : 0;
 
-  // Test-wise scores for bar chart
-  const testScores = hasData
-    ? stats.recentTests.map((t) => ({
-        test: t.testName.length > 12 ? t.testName.substring(0, 12) + '...' : t.testName,
-        score: t.score,
+  // Subject-wise performance for bar chart
+  const subjectPerformance = hasData
+    ? (stats.subjectPerformance || []).map((s) => ({
+        subject: s.subject.length > 16 ? s.subject.substring(0, 16) + '...' : s.subject,
+        fullSubject: s.subject,
+        avgScore: s.avgScore,
+        testsTaken: s.testsTaken,
       }))
     : [];
 
@@ -232,16 +234,30 @@ function ReportsPage() {
             </div>
           </div>
 
-          {/* Test-wise Scores */}
+          {/* Subject-wise Performance */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
-            <h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">Recent Test Scores</h2>
+            <h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">Subject-wise Performance</h2>
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={testScores} layout="vertical" margin={{ left: 10 }}>
+              <BarChart data={subjectPerformance} layout="vertical" margin={{ left: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} />
-                <YAxis type="category" dataKey="test" tick={{ fontSize: 10 }} width={100} />
-                <Tooltip />
-                <Bar dataKey="score" fill="#3b82f6" radius={[0, 6, 6, 0]} barSize={16} />
+                <YAxis type="category" dataKey="subject" tick={{ fontSize: 10 }} width={130} />
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white border border-gray-200 rounded-lg p-2 lg:p-3 shadow-lg">
+                          <p className="font-semibold text-gray-800 text-sm">{data.fullSubject}</p>
+                          <p className="text-blue-600 text-sm">Avg Score: {data.avgScore}%</p>
+                          <p className="text-gray-600 text-sm">Tests Taken: {data.testsTaken}</p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Bar dataKey="avgScore" fill="#3b82f6" radius={[0, 6, 6, 0]} barSize={16} />
               </BarChart>
             </ResponsiveContainer>
           </div>

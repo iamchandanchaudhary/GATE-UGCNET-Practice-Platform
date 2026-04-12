@@ -16,6 +16,10 @@ const testResultSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    subject: {
+      type: String,
+      default: "Unknown",
+    },
     totalQuestions: {
       type: Number,
       required: true,
