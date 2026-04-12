@@ -11,6 +11,7 @@ import {
   FaQuestionCircle,
   FaBook,
   FaFilter,
+  FaSearch,
 } from "react-icons/fa";
 
 const TestListPage = () => {
@@ -19,6 +20,7 @@ const TestListPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [viewModal, setViewModal] = useState({ open: false, test: null });
   const [editModal, setEditModal] = useState({ open: false, test: null });
@@ -58,10 +60,28 @@ const TestListPage = () => {
     new Set(tests.map((test) => test.subject).filter(Boolean))
   );
 
-  const filteredTests =
-    selectedSubject === "All"
-      ? tests
-      : tests.filter((test) => test.subject === selectedSubject);
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+  const filteredTests = tests.filter((test) => {
+    const matchesSubject =
+      selectedSubject === "All" || test.subject === selectedSubject;
+
+    if (!normalizedSearchQuery) {
+      return matchesSubject;
+    }
+
+    const searchableText = [
+      test.name,
+      test.subject,
+      test.numberOfQuestions?.toString(),
+      test.duration?.toString(),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return matchesSubject && searchableText.includes(normalizedSearchQuery);
+  });
 
   const handleView = async (testId) => {
     try {
@@ -157,13 +177,24 @@ const TestListPage = () => {
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Test List</h1>
             <p className="text-gray-500 text-xs sm:text-sm mt-1">Manage all your tests</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
-            <div className="flex items-center gap-2">
-              {/* <FaFilter className="text-gray-500 text-sm" /> */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-end w-full sm:w-auto">
+            <div className="relative w-full sm:w-64">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search tests..."
+                className="w-full bg-white text-gray-800 pl-9 pr-3 py-2 rounded-md border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+              />
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <FaFilter className="text-gray-500 text-sm" />
               <select
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="bg-white text-gray-800 px-3 py-2 rounded-md border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+                className="w-full sm:w-auto bg-white text-gray-800 px-3 py-2 rounded-md border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
               >
                 <option value="All">All Subjects</option>
                 {subjectOptions.map((subject) => (
@@ -189,6 +220,12 @@ const TestListPage = () => {
           </div>
         )}
 
+        {(selectedSubject !== "All" || normalizedSearchQuery) && (
+          <div className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+            Showing {filteredTests.length} of {tests.length} tests
+          </div>
+        )}
+
         {tests.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
             <FaQuestionCircle className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
@@ -207,16 +244,19 @@ const TestListPage = () => {
           <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
             <FaQuestionCircle className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
-              No Tests For Selected Subject
+              No Matching Tests
             </h2>
             <p className="text-gray-500 mb-6 text-sm sm:text-base">
-              Try a different subject filter or reset to view all tests.
+              Try changing your search text or subject filter.
             </p>
             <button
-              onClick={() => setSelectedSubject("All")}
+              onClick={() => {
+                setSelectedSubject("All");
+                setSearchQuery("");
+              }}
               className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
             >
-              Show All Subjects
+              Clear Filters
             </button>
           </div>
         ) : (

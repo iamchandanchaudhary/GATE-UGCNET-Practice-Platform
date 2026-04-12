@@ -15,6 +15,7 @@ import {
   FaPhone,
   FaUniversity,
   FaGraduationCap,
+  FaSearch,
 } from "react-icons/fa";
 
 const RegisteredUsersPage = () => {
@@ -22,6 +23,7 @@ const RegisteredUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [detailsModal, setDetailsModal] = useState({ open: false, user: null });
   const [performanceModal, setPerformanceModal] = useState({
@@ -65,6 +67,28 @@ const RegisteredUsersPage = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+  const filteredUsers = users.filter((user) => {
+    if (!normalizedSearchQuery) {
+      return true;
+    }
+
+    const searchableText = [
+      user.name,
+      user.email,
+      user.phone,
+      user.college,
+      user.exam,
+      user.year?.toString(),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return searchableText.includes(normalizedSearchQuery);
+  });
 
   const handleViewDetails = (user) => {
     setDetailsModal({ open: true, user });
@@ -183,9 +207,23 @@ const RegisteredUsersPage = () => {
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Registered Users</h1>
             <p className="text-gray-500 text-xs sm:text-sm mt-1">View and manage all registered users</p>
           </div>
-          <div className="bg-white px-3 sm:px-4 py-2 rounded-lg border border-gray-200 shadow-sm w-fit">
-            <span className="text-gray-500 text-sm">Total: </span>
-            <span className="text-gray-800 font-bold text-sm">{users.length}</span>
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center w-full sm:w-auto">
+            <div className="relative w-full sm:w-72">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search users..."
+                className="w-full bg-white text-gray-800 pl-9 pr-3 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+              />
+            </div>
+
+            <div className="bg-white px-3 sm:px-4 py-2 rounded-lg border border-gray-200 shadow-sm w-fit">
+              <span className="text-gray-500 text-sm">Showing: </span>
+              <span className="text-gray-800 font-bold text-sm">{filteredUsers.length}</span>
+              <span className="text-gray-500 text-sm"> / {users.length}</span>
+            </div>
           </div>
         </div>
 
@@ -202,6 +240,20 @@ const RegisteredUsersPage = () => {
             <p className="text-gray-500 text-sm sm:text-base">
               No users have registered yet.
             </p>
+          </div>
+        ) : filteredUsers.length === 0 ? (
+          <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
+            <FaUser className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Matching Users</h2>
+            <p className="text-gray-500 mb-6 text-sm sm:text-base">
+              Try a different search term.
+            </p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
+            >
+              Clear Search
+            </button>
           </div>
         ) : (
           <>
@@ -229,7 +281,7 @@ const RegisteredUsersPage = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {users.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                       <tr
                         key={user._id}
                         className="hover:bg-gray-50 transition"
@@ -284,7 +336,7 @@ const RegisteredUsersPage = () => {
 
             {/* Mobile/Tablet Cards */}
             <div className="lg:hidden grid gap-3">
-              {users.map((user, index) => (
+              {filteredUsers.map((user, index) => (
                 <div
                   key={user._id}
                   className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
