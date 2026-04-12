@@ -262,12 +262,23 @@ function ProfilePage() {
             {/* Email (Read-only) */}
             <div>
               <label className="block text-xs lg:text-sm font-medium text-gray-600 mb-1 lg:mb-1.5">
-                Email {editing && <span className="text-gray-400 font-normal">(cannot be changed)</span>}
+                Email
               </label>
-              <div className="flex items-center gap-2 text-gray-800 text-sm">
-                <HiOutlineMail className="text-gray-400" />
-                {formData.email}
-              </div>
+              {editing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  readOnly
+                  placeholder="Enter email"
+                  className="w-full border border-gray-300 rounded-lg px-3 lg:px-4 py-2 lg:py-2.5 text-sm outline-none"
+                />
+              ) : (
+                <div className="flex items-center gap-2 text-gray-800 text-sm">
+                  <HiOutlineMail className="text-gray-400" />
+                  {formData.email}
+                </div>
+              )}
             </div>
 
             {/* Phone */}

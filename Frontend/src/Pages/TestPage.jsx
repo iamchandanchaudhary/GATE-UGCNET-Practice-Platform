@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   HiOutlineClock,
@@ -30,6 +30,7 @@ function TestPage() {
   const [isTestActive, setIsTestActive] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [pendingLeavePath, setPendingLeavePath] = useState(null);
+  const allowNavigationRef = useRef(false);
 
   useEffect(() => {
     fetchTest();
@@ -90,6 +91,7 @@ function TestPage() {
       const data = await response.json();
 
       if (data.success) {
+        allowNavigationRef.current = true;
         setIsTestActive(false);
         sessionStorage.setItem('testResult', JSON.stringify(data.result));
         navigate('/test-report', { replace: true });
@@ -106,7 +108,7 @@ function TestPage() {
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      if (!isTestActive || isSubmitting) return;
+      if (!isTestActive || isSubmitting || allowNavigationRef.current) return;
 
       event.preventDefault();
       event.returnValue = '';
@@ -119,43 +121,64 @@ function TestPage() {
   useEffect(() => {
     if (!isTestActive || isSubmitting) return;
 
-    const handlePopState = () => {
-      window.history.pushState(null, '', window.location.href);
-      setPendingLeavePath('@@BACK@@');
-      setShowLeaveConfirm(true);
+    const lockedPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const originalPushState = window.history.pushState.bind(window.history);
+    const originalReplaceState = window.history.replaceState.bind(window.history);
+
+    const resolveNextPath = (urlLike) => {
+      if (!urlLike) return null;
+      try {
+        const resolved = new URL(String(urlLike), window.location.origin);
+        if (resolved.origin !== window.location.origin) return null;
+        return `${resolved.pathname}${resolved.search}${resolved.hash}`;
+      } catch {
+        return null;
+      }
     };
 
-    const handleDocumentClick = (event) => {
-      const anchor = event.target.closest('a[href]');
-      if (!anchor) return;
+    const interceptRouteChange = (urlLike) => {
+      if (!isTestActive || isSubmitting || allowNavigationRef.current) return false;
 
-      const href = anchor.getAttribute('href');
-      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
-        return;
-      }
-
-      const url = new URL(href, window.location.origin);
-      const nextPath = `${url.pathname}${url.search}${url.hash}`;
       const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      const nextPath = resolveNextPath(urlLike);
 
-      if (nextPath === currentPath || url.origin !== window.location.origin) return;
+      if (!nextPath || nextPath === currentPath) return false;
 
-      event.preventDefault();
       setPendingLeavePath(nextPath);
       setShowLeaveConfirm(true);
+      return true;
     };
 
-    window.history.pushState(null, '', window.location.href);
+    window.history.pushState = function pushStatePatched(state, title, url) {
+      if (interceptRouteChange(url)) return;
+      originalPushState(state, title, url);
+    };
+
+    window.history.replaceState = function replaceStatePatched(state, title, url) {
+      if (interceptRouteChange(url)) return;
+      originalReplaceState(state, title, url);
+    };
+
+    const handlePopState = () => {
+      if (!isTestActive || isSubmitting || allowNavigationRef.current) return;
+
+      setPendingLeavePath('@@BACK@@');
+      setShowLeaveConfirm(true);
+      originalPushState(null, '', lockedPath);
+    };
+
+    window.history.pushState(null, '', lockedPath);
     window.addEventListener('popstate', handlePopState);
-    document.addEventListener('click', handleDocumentClick);
 
     return () => {
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
       window.removeEventListener('popstate', handlePopState);
-      document.removeEventListener('click', handleDocumentClick);
     };
   }, [isTestActive, isSubmitting]);
 
   const handleLeaveTest = () => {
+    allowNavigationRef.current = true;
     setIsTestActive(false);
     setShowLeaveConfirm(false);
     setShowSubmitConfirm(false);
