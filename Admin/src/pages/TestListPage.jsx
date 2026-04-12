@@ -9,6 +9,8 @@ import {
   FaCheck,
   FaClock,
   FaQuestionCircle,
+  FaBook,
+  FaFilter,
 } from "react-icons/fa";
 
 const TestListPage = () => {
@@ -16,6 +18,7 @@ const TestListPage = () => {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("All");
 
   const [viewModal, setViewModal] = useState({ open: false, test: null });
   const [editModal, setEditModal] = useState({ open: false, test: null });
@@ -50,6 +53,15 @@ const TestListPage = () => {
   useEffect(() => {
     fetchTests();
   }, []);
+
+  const subjectOptions = Array.from(
+    new Set(tests.map((test) => test.subject).filter(Boolean))
+  );
+
+  const filteredTests =
+    selectedSubject === "All"
+      ? tests
+      : tests.filter((test) => test.subject === selectedSubject);
 
   const handleView = async (testId) => {
     try {
@@ -145,12 +157,30 @@ const TestListPage = () => {
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Test List</h1>
             <p className="text-gray-500 text-xs sm:text-sm mt-1">Manage all your tests</p>
           </div>
-          <Link
-            to="/add-test"
-            className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-lg transition text-sm text-center"
-          >
-            + Add New Test
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+            <div className="flex items-center gap-2">
+              {/* <FaFilter className="text-gray-500 text-sm" /> */}
+              <select
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="bg-white text-gray-800 px-3 py-2 rounded-md border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+              >
+                <option value="All">All Subjects</option>
+                {subjectOptions.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <Link
+              to="/add-test"
+              className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-md transition text-sm text-center"
+            >
+              + Add New Test
+            </Link>
+          </div>
         </div>
 
         {error && (
@@ -173,9 +203,25 @@ const TestListPage = () => {
               Create Your First Test
             </Link>
           </div>
+        ) : filteredTests.length === 0 ? (
+          <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
+            <FaQuestionCircle className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+              No Tests For Selected Subject
+            </h2>
+            <p className="text-gray-500 mb-6 text-sm sm:text-base">
+              Try a different subject filter or reset to view all tests.
+            </p>
+            <button
+              onClick={() => setSelectedSubject("All")}
+              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
+            >
+              Show All Subjects
+            </button>
+          </div>
         ) : (
           <div className="grid gap-3 sm:gap-4">
-            {tests.map((test) => (
+            {filteredTests.map((test) => (
               <div
                 key={test._id}
                 className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:border-[#3475d9] hover:shadow-sm transition shadow-sm"
@@ -196,6 +242,10 @@ const TestListPage = () => {
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-gray-500 text-xs sm:text-sm">
+                      <span className="flex items-center gap-1 sm:gap-2">
+                        <FaBook className="text-[#3475d9]" />
+                        {test.subject || "N/A"}
+                      </span>
                       <span className="flex items-center gap-1 sm:gap-2">
                         <FaClock className="text-[#3475d9]" />
                         {formatDuration(test.duration)}
@@ -315,6 +365,10 @@ const ViewModal = ({ test, onClose }) => {
 
         <div className="p-4 sm:p-6 overflow-y-auto flex-1">
           <div className="flex flex-wrap gap-3 sm:gap-6 mb-4 sm:mb-6">
+            <span className="bg-amber-50 text-amber-700 px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 border border-amber-200 text-sm">
+              <FaBook />
+              {test.subject || "N/A"}
+            </span>
             <span className="bg-blue-50 text-[#3475d9] px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 border border-blue-200 text-sm">
               <FaClock />
               {test.duration === 60 ? "1 Hour" : `${test.duration} Min`}
@@ -374,11 +428,22 @@ const ViewModal = ({ test, onClose }) => {
 // Edit Modal Component
 const EditModal = ({ test, token, onClose, onSave }) => {
   const [testName, setTestName] = useState(test.name);
+  const [subject, setSubject] = useState(test.subject || "");
   const [duration, setDuration] = useState(test.duration);
   const [isActive, setIsActive] = useState(test.isActive);
   const [questions, setQuestions] = useState(test.questions);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const subjectOptions = [
+    { value: "Computer Science", label: "Computer Science" },
+    { value: "General Aptitude", label: "General Aptitude" },
+    {
+      value: "Computer Science & Applications",
+      label: "Computer Science & Applications",
+    },
+    { value: "Mathematics", label: "Mathematics" },
+  ];
 
   const handleQuestionChange = (index, value) => {
     const updated = [...questions];
@@ -399,8 +464,14 @@ const EditModal = ({ test, token, onClose, onSave }) => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
     setError("");
+
+    if (!subject) {
+      setError("Subject is required");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -413,6 +484,7 @@ const EditModal = ({ test, token, onClose, onSave }) => {
           },
           body: JSON.stringify({
             name: testName,
+            subject,
             duration,
             isActive,
             questions,
@@ -455,7 +527,7 @@ const EditModal = ({ test, token, onClose, onSave }) => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="sm:col-span-2 lg:col-span-1">
               <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Test Name
@@ -466,6 +538,23 @@ const EditModal = ({ test, token, onClose, onSave }) => {
                 onChange={(e) => setTestName(e.target.value)}
                 className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
               />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+                Subject
+              </label>
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full bg-white text-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+              >
+                <option value="">Select Subject</option>
+                {subjectOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-gray-700 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
