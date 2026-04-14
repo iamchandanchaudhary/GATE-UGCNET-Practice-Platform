@@ -69,7 +69,3 @@ npm start
 # 📜 License
 This project is developed for academic purposes.
 You may modify and use it for learning and educational reference.
-
-# 🙌 Acknowledgements
-- Faculty mentors and guides
-- Online learning resources and documentation
