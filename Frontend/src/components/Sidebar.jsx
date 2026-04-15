@@ -6,12 +6,14 @@ import {
   HiOutlineUser,
   HiOutlineLogout,
   HiOutlineViewGrid,
+  HiOutlineBookOpen,
   HiX,
 } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: HiOutlineViewGrid, path: '/dashboard' },
+  { label: 'Learning', icon: HiOutlineBookOpen, path: '/learning' },
   { label: 'My Tests', icon: HiOutlineClipboardList, path: '/my-tests' },
   { label: 'Performance Reports', icon: HiOutlineChartBar, path: '/reports' },
 ];
@@ -65,10 +67,10 @@ function Sidebar({ isOpen, onClose }) {
                 key={item.label}
                 to={item.path}
                 onClick={() => {handleNavClick(); scrollUp()}}
-                className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-150 ${
+                className={`flex items-center gap-3 px-6 py-3 border-l-4 text-sm font-medium transition-colors duration-150 ${
                   isActive
-                    ? 'text-[#3475d9] bg-blue-50 border-r-3 border-[#3475d9]'
-                    : 'text-gray-600 hover:text-[#3475d9] hover:bg-gray-50'
+                    ? 'text-[#3475d9] bg-blue-50 border-[#3475d9]'
+                    : 'text-gray-600 hover:text-[#3475d9] hover:bg-gray-50 border-transparent'
                 }`}
               >
                 <item.icon className="text-lg" />

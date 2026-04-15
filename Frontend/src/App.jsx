@@ -15,6 +15,7 @@ import TestPage from './Pages/TestPage';
 import TestReportPage from './Pages/TestReportPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import "./App.css";
+import Learning from './Pages/Learning';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -88,6 +89,15 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <TestReportPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/learning"
+          element={
+            <ProtectedRoute>
+              <Learning />
             </ProtectedRoute>
           }
         />

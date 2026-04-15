@@ -73,7 +73,7 @@ const Navbar = () => {
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <div ref={profileDropdownRef} className="relative">
+              <div ref={profileDropdownRef} className="relative cursor-pointer">
                 <span onClick={() => setProfileDropdown(!profileDropdown)} className="flex items-center gap-2">
                   <span className="w-9 h-9 rounded-full bg-[#3475d9] text-white flex items-center justify-center text-sm font-bold uppercase">
                     {user.name?.charAt(0)}
@@ -139,7 +139,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-sm hover:bg-gray-50 transition-colors duration-200"
+                  className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-sm bg-gray-100 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Login
                 </Link>
