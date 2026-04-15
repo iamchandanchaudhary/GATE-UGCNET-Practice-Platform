@@ -13,9 +13,9 @@ import { useAuth } from '../context/AuthContext';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: HiOutlineViewGrid, path: '/dashboard' },
-  { label: 'Learning', icon: HiOutlineBookOpen, path: '/learning' },
   { label: 'My Tests', icon: HiOutlineClipboardList, path: '/my-tests' },
   { label: 'Performance Reports', icon: HiOutlineChartBar, path: '/reports' },
+  { label: 'Learning', icon: HiOutlineBookOpen, path: '/learning' },
 ];
 
 function Sidebar({ isOpen, onClose }) {
@@ -47,7 +47,7 @@ function Sidebar({ isOpen, onClose }) {
 
       {/* Sidebar */}
       <aside
-        className={`w-64 lg:w-56 bg-white border-r border-gray-200 flex flex-col justify-between fixed top-16 bottom-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`w-64 lg:w-56 bg-[#bbdcfc] shadow-md border-r border-gray-200 flex flex-col justify-between fixed top-16 bottom-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
@@ -69,8 +69,8 @@ function Sidebar({ isOpen, onClose }) {
                 onClick={() => {handleNavClick(); scrollUp()}}
                 className={`flex items-center gap-3 px-6 py-3 border-l-4 text-sm font-medium transition-colors duration-150 ${
                   isActive
-                    ? 'text-[#3475d9] bg-blue-50 border-[#3475d9]'
-                    : 'text-gray-600 hover:text-[#3475d9] hover:bg-gray-50 border-transparent'
+                    ? 'text-[#3475d9] bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff] border-[#3475d9]'
+                    : 'text-gray-900 hover:bg-gray-50/40 border-transparent'
                 }`}
               >
                 <item.icon className="text-lg" />
@@ -81,14 +81,14 @@ function Sidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Bottom sidebar links */}
-        <div className="border-t border-gray-200 py-4">
+        <div className="border-t border-gray-600/70 py-4">
           <Link
             to="/profile"
             onClick={() => {handleNavClick(); scrollUp()}}
-            className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-150 ${
+            className={`flex items-center gap-3 px-6 py-3 border-l-4 text-sm font-medium transition-colors duration-150 ${
               location.pathname === '/profile'
-                ? 'text-[#3475d9] bg-blue-50 border-r-3 border-[#3475d9]'
-                : 'text-gray-600 hover:text-[#3475d9] hover:bg-gray-50'
+                ? 'text-[#3475d9] bg-blue-50 border-[#3475d9]'
+                : 'text-gray-900 hover:bg-gray-50/40 border-transparent'
             }`}
           >
             <HiOutlineUser className="text-lg" />
@@ -96,7 +96,7 @@ function Sidebar({ isOpen, onClose }) {
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 w-full transition-colors duration-150"
+            className="flex items-center cursor-pointer gap-3 px-6 py-3 text-sm font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 w-full transition-colors duration-150"
           >
             <HiOutlineLogout className="text-lg" />
             Logout

@@ -6,7 +6,7 @@ function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff]">
       {/* Mobile Menu Button - Fixed at top */}
       <button
         onClick={() => setSidebarOpen(true)}

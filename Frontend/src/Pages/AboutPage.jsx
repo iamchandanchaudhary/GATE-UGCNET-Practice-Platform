@@ -66,7 +66,7 @@ const team = [
 
 const AboutPage = () => {
   return (
-    <div className="bg-white">
+    <div className="bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff]">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#3475d9] to-blue-800 text-white">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTRWMjhIMjR2MmgxMnptMC0yMFYySDI0djhoMTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
@@ -92,7 +92,7 @@ const AboutPage = () => {
         {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z" fill="white" />
+            <path d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z" />
           </svg>
         </div>
       </section>
@@ -113,7 +113,7 @@ const AboutPage = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#3475d9] bg-blue-50 px-3 py-1 rounded-full">
@@ -153,7 +153,7 @@ const AboutPage = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-gray-50 py-16 md:py-20">
+      <section className="py-10 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-xs font-bold uppercase tracking-wider text-[#3475d9] bg-blue-50 px-3 py-1 rounded-full">
@@ -242,7 +242,7 @@ const AboutPage = () => {
       </section>
 
       {/* Footer Note */}
-      <div className="bg-gray-50 py-6 text-center">
+      <div className="py-6 text-center">
         <span className="inline-flex items-center gap-1 text-sm text-gray-500">
           Built with <span className="text-red-500">❤️</span> for learners across India
         </span>

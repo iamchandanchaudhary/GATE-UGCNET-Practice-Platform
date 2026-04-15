@@ -74,7 +74,7 @@ function Learning() {
 
   return (
     <DashboardLayout>
-      <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff] p-6 sm:p-8 lg:p-10 mb-6 lg:mb-8">
+      <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-linear-to-r from-[#bbdcfc] via-[#e9e4fc] to-[#d6d6fe] shadow-sm  p-6 sm:p-8 lg:p-10 mb-6 lg:mb-8">
         <div className="absolute -top-16 -right-10 h-44 w-44 rounded-full bg-[#3475d9]/15 blur-2xl" />
         <div className="absolute -bottom-16 -left-8 h-44 w-44 rounded-full bg-sky-300/20 blur-2xl" />
 

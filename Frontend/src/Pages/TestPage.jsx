@@ -268,7 +268,7 @@ function TestPage() {
   const isLowTime = timeLeft <= 120;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff] flex flex-col">
       {/* Top Bar */}
       <header className="bg-white border-b border-gray-200 px-3 lg:px-6 py-2 lg:py-3 flex items-center justify-between fixed top-16 w-full z-30">
         

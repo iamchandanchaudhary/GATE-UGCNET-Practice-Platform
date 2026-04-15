@@ -44,7 +44,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-blue-50 px-4">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff] px-4">
       <div className="w-full max-w-md">
         {/* Card with blue top border */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
