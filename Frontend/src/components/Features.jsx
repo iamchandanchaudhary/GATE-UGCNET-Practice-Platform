@@ -4,7 +4,7 @@ import { BiTimeFive } from 'react-icons/bi';
 
 const features = [
   {
-    icon: <FaGraduationCap className="text-3xl text-[#3475d9]" />,
+    icon: <FaGraduationCap className="text-2xl sm:text-3xl text-[#3475d9]" />,
     title: 'Mock Tests & Quizzes',
     description:
       'Practice with thousands of curated questions designed to match the real exam pattern.',
@@ -12,7 +12,7 @@ const features = [
     borderColor: 'border-blue-100',
   },
   {
-    icon: <BiTimeFive className="text-3xl text-[#3475d9]" />,
+    icon: <BiTimeFive className="text-2xl sm:text-3xl text-[#3475d9]" />,
     title: 'Detailed Analytics',
     description:
       'Track your performance with in-depth analytics and identify areas for improvement.',
@@ -20,7 +20,7 @@ const features = [
     borderColor: 'border-blue-100',
   },
   {
-    icon: <FaShieldAlt className="text-3xl text-[#3475d9]" />,
+    icon: <FaShieldAlt className="text-2xl sm:text-3xl text-[#3475d9]" />,
     title: 'Expert Guidance',
     description:
       'Get access to expert tips, strategies, and study materials to boost your preparation.',
@@ -31,23 +31,23 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="bg-slate-50 py-16 md:py-4 mb-10">
+    <section className="bg-slate-50 py-10 sm:py-16 md:py-4 mb-6 sm:mb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex flex-col items-center text-center p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="flex flex-col items-center text-center p-5 sm:p-8 bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div
-                className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mb-5`}
+                className={`w-12 h-12 sm:w-16 sm:h-16 ${feature.bgColor} rounded-full flex items-center justify-center mb-3 sm:mb-5`}
               >
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-2">
+              <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                 {feature.description}
               </p>
             </div>

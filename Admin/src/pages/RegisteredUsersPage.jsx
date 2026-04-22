@@ -11,6 +11,11 @@ import {
   FaCheckCircle,
   FaTimesCircle,
   FaClock,
+  FaTrash,
+  FaPhone,
+  FaUniversity,
+  FaGraduationCap,
+  FaSearch,
 } from "react-icons/fa";
 
 const RegisteredUsersPage = () => {
@@ -18,6 +23,7 @@ const RegisteredUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [detailsModal, setDetailsModal] = useState({ open: false, user: null });
   const [performanceModal, setPerformanceModal] = useState({
@@ -25,6 +31,11 @@ const RegisteredUsersPage = () => {
     user: null,
     performance: null,
     loading: false,
+  });
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    user: null,
+    deleting: false,
   });
 
   const fetchUsers = async () => {
@@ -56,6 +67,28 @@ const RegisteredUsersPage = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+  const filteredUsers = users.filter((user) => {
+    if (!normalizedSearchQuery) {
+      return true;
+    }
+
+    const searchableText = [
+      user.name,
+      user.email,
+      user.phone,
+      user.college,
+      user.exam,
+      user.year?.toString(),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return searchableText.includes(normalizedSearchQuery);
+  });
 
   const handleViewDetails = (user) => {
     setDetailsModal({ open: true, user });
@@ -97,6 +130,43 @@ const RegisteredUsersPage = () => {
     }
   };
 
+  const handleDeleteClick = (user) => {
+    setDeleteModal({ open: true, user, deleting: false });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteModal.user) return;
+
+    setDeleteModal((prev) => ({ ...prev, deleting: true }));
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${deleteModal.user._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Remove user from list
+        setUsers((prev) => prev.filter((u) => u._id !== deleteModal.user._id));
+        setDeleteModal({ open: false, user: null, deleting: false });
+      } else {
+        setError(data.message || "Failed to delete user");
+        setDeleteModal((prev) => ({ ...prev, deleting: false }));
+      }
+    } catch (error) {
+      console.error("Delete user error:", error);
+      setError("Connection error. Please try again.");
+      setDeleteModal((prev) => ({ ...prev, deleting: false }));
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -124,114 +194,204 @@ const RegisteredUsersPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-gray-600 text-xl">Loading users...</div>
+        <div className="text-gray-600 text-lg sm:text-xl">Loading users...</div>
       </div>
     );
   }
 
   return (
     <>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center justify-between mb-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Registered Users</h1>
-            <p className="text-gray-500 text-sm mt-1">View and manage all registered users</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Registered Users</h1>
+            <p className="text-gray-500 text-xs sm:text-sm mt-1">View and manage all registered users</p>
           </div>
-          <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
-            <span className="text-gray-500">Total Users: </span>
-            <span className="text-gray-800 font-bold">{users.length}</span>
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center w-full sm:w-auto">
+            <div className="relative w-full sm:w-72">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search users..."
+                className="w-full bg-white text-gray-800 pl-9 pr-3 py-2 rounded-lg border border-gray-300 focus:border-[#3475d9] outline-none text-sm"
+              />
+            </div>
+
+            <div className="bg-white px-3 sm:px-4 py-2 rounded-lg border border-gray-200 shadow-sm w-fit">
+              <span className="text-gray-500 text-sm">Showing: </span>
+              <span className="text-gray-800 font-bold text-sm">{filteredUsers.length}</span>
+              <span className="text-gray-500 text-sm"> / {users.length}</span>
+            </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm">
             {error}
           </div>
         )}
 
         {users.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-sm">
-            <FaUser className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">No Users Found</h2>
-            <p className="text-gray-500">
+          <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
+            <FaUser className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Users Found</h2>
+            <p className="text-gray-500 text-sm sm:text-base">
               No users have registered yet.
             </p>
           </div>
-        ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                    #
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                    Name
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                    Email
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                    Registered On
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {users.map((user, index) => (
-                  <tr
-                    key={user._id}
-                    className="hover:bg-gray-50 transition"
-                  >
-                    <td className="px-6 py-4 text-gray-500">{index + 1}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#3475d9] rounded-full flex items-center justify-center text-white font-bold">
-                          {user.name?.charAt(0).toUpperCase() || "U"}
-                        </div>
-                        <span className="text-gray-800 font-medium">{user.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">{user.email}</td>
-                    <td className="px-6 py-4 text-gray-500">
-                      {formatDate(user.createdAt)}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleViewDetails(user)}
-                          className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
-                          title="View Details"
-                        >
-                          <FaEye />
-                          <span className="text-sm">Details</span>
-                        </button>
-                        <button
-                          onClick={() => handleViewPerformance(user)}
-                          className="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200"
-                          title="View Performance"
-                        >
-                          <FaChartLine />
-                          <span className="text-sm">Performance</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        ) : filteredUsers.length === 0 ? (
+          <div className="bg-white border border-gray-200 rounded-xl p-8 sm:p-12 text-center shadow-sm">
+            <FaUser className="text-5xl sm:text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Matching Users</h2>
+            <p className="text-gray-500 mb-6 text-sm sm:text-base">
+              Try a different search term.
+            </p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
+            >
+              Clear Search
+            </button>
           </div>
+        ) : (
+          <>
+            {/* Desktop Table */}
+            <div className="hidden lg:block bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        #
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Email
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                        Registered On
+                      </th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {filteredUsers.map((user, index) => (
+                      <tr
+                        key={user._id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        <td className="px-6 py-4 text-gray-500">{index + 1}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-[#3475d9] rounded-full flex items-center justify-center text-white font-bold">
+                              {user.name?.charAt(0).toUpperCase() || "U"}
+                            </div>
+                            <span className="text-gray-800 font-medium">{user.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-600">{user.email}</td>
+                        <td className="px-6 py-4 text-gray-500">
+                          {formatDate(user.createdAt)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => handleViewDetails(user)}
+                              className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
+                              title="View Details"
+                            >
+                              <FaEye />
+                              <span className="text-sm">Details</span>
+                            </button>
+                            <button
+                              onClick={() => handleViewPerformance(user)}
+                              className="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200"
+                              title="View Performance"
+                            >
+                              <FaChartLine />
+                              <span className="text-sm">Performance</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(user)}
+                              className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
+                              title="Delete User"
+                            >
+                              <FaTrash />
+                              <span className="text-sm">Delete</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile/Tablet Cards */}
+            <div className="lg:hidden grid gap-3">
+              {filteredUsers.map((user, index) => (
+                <div
+                  key={user._id}
+                  className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="w-10 h-10 bg-[#3475d9] rounded-full flex items-center justify-center text-white font-bold shrink-0">
+                      {user.name?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-gray-800 font-medium truncate">{user.name}</h3>
+                      <p className="text-gray-500 text-sm truncate">{user.email}</p>
+                    </div>
+                    <span className="text-gray-400 text-xs">#{index + 1}</span>
+                  </div>
+
+                  <div className="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                    <FaCalendarAlt className="text-gray-400" />
+                    Joined: {formatDate(user.createdAt)}
+                  </div>
+
+                  <div className="flex gap-2 pt-3 border-t border-gray-100">
+                    <button
+                      onClick={() => handleViewDetails(user)}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200 text-sm"
+                    >
+                      <FaEye />
+                      Details
+                    </button>
+                    <button
+                      onClick={() => handleViewPerformance(user)}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200 text-sm"
+                    >
+                      <FaChartLine />
+                      Performance
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(user)}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 text-sm"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </main>
 
       {/* Details Modal */}
       {detailsModal.open && detailsModal.user && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
-            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-              <h2 className="text-xl font-bold text-gray-800">User Details</h2>
+          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-3xl px-4 overflow-hidden shadow-xl">
+            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">User Details</h2>
               <button
                 onClick={() => setDetailsModal({ open: false, user: null })}
                 className="p-2 text-gray-500 hover:text-gray-700 transition"
@@ -240,35 +400,65 @@ const RegisteredUsersPage = () => {
               </button>
             </div>
 
-            <div className="p-6">
-              <div className="flex justify-center mb-6">
-                <div className="w-20 h-20 bg-[#3475d9] rounded-full flex items-center justify-center text-white text-3xl font-bold">
+            <div className="p-2 sm:p-6">
+              <div className="flex justify-center mb-4 sm:mb-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#3475d9] rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                   {detailsModal.user.name?.charAt(0).toUpperCase() || "U"}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center gap-3 border border-gray-200">
-                  <FaUser className="text-[#3475d9] text-lg" />
-                  <div>
-                    <p className="text-gray-500 text-sm">Full Name</p>
-                    <p className="text-gray-800 font-medium">{detailsModal.user.name}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 space-y-3 sm:space-y-4 gap-0 sm:gap-4">
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaUser className="text-[#3475d9] text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Full Name</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">{detailsModal.user.name}</p>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center gap-3 border border-gray-200">
-                  <FaEnvelope className="text-green-600 text-lg" />
-                  <div>
-                    <p className="text-gray-500 text-sm">Email Address</p>
-                    <p className="text-gray-800 font-medium">{detailsModal.user.email}</p>
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaEnvelope className="text-green-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Email Address</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">{detailsModal.user.email}</p>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center gap-3 border border-gray-200">
-                  <FaCalendarAlt className="text-purple-600 text-lg" />
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaPhone className="text-blue-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Phone Number</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.phone || "Not provided"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaUniversity className="text-indigo-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">College / University</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.college || "Not provided"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200">
+                  <FaGraduationCap className="text-orange-600 text-lg shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-500 text-xs sm:text-sm">Target Exam & Year</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base truncate">
+                      {detailsModal.user.exam || "GATE CS"} - {detailsModal.user.year || "2026"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 flex items-center gap-3 border border-gray-200 mb-0 sm:mb-4">
+                  <FaCalendarAlt className="text-purple-600 text-lg shrink-0" />
                   <div>
-                    <p className="text-gray-500 text-sm">Registered On</p>
-                    <p className="text-gray-800 font-medium">
+                    <p className="text-gray-500 text-xs sm:text-sm">Registered On</p>
+                    <p className="text-gray-800 font-medium text-sm sm:text-base">
                       {formatDateTime(detailsModal.user.createdAt)}
                     </p>
                   </div>
@@ -279,7 +469,7 @@ const RegisteredUsersPage = () => {
             <div className="p-4 border-t border-gray-200">
               <button
                 onClick={() => setDetailsModal({ open: false, user: null })}
-                className="w-full py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+                className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Close
               </button>
@@ -290,12 +480,12 @@ const RegisteredUsersPage = () => {
 
       {/* Performance Modal */}
       {performanceModal.open && performanceModal.user && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
           <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-bold text-gray-800">Performance Report</h2>
-                <p className="text-gray-500 text-sm">{performanceModal.user.name}</p>
+            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+              <div className="min-w-0">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800">Performance Report</h2>
+                <p className="text-gray-500 text-xs sm:text-sm truncate">{performanceModal.user.name}</p>
               </div>
               <button
                 onClick={() =>
@@ -306,59 +496,59 @@ const RegisteredUsersPage = () => {
                     loading: false,
                   })
                 }
-                className="p-2 text-gray-500 hover:text-gray-700 transition"
+                className="p-2 text-gray-500 hover:text-gray-700 transition shrink-0"
               >
                 <FaTimes className="text-xl" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto flex-1">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1">
               {performanceModal.loading ? (
                 <div className="text-center py-12">
-                  <div className="text-gray-600 text-lg">Loading performance data...</div>
+                  <div className="text-gray-600 text-base sm:text-lg">Loading performance data...</div>
                 </div>
               ) : performanceModal.performance ? (
                 <>
                   {/* Stats Overview */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-blue-50 rounded-lg p-4 flex items-center gap-3 border border-blue-200">
-                      <FaClipboardList className="text-[#3475d9] text-2xl" />
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div className="bg-blue-50 rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-3 border border-blue-200">
+                      <FaClipboardList className="text-[#3475d9] text-xl sm:text-2xl shrink-0" />
                       <div>
-                        <p className="text-3xl font-bold text-gray-800">
+                        <p className="text-2xl sm:text-3xl font-bold text-gray-800">
                           {performanceModal.performance.totalTests}
                         </p>
-                        <p className="text-gray-500 text-sm">Tests Taken</p>
+                        <p className="text-gray-500 text-xs sm:text-sm">Tests Taken</p>
                       </div>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-4 flex items-center gap-3 border border-green-200">
-                      <FaChartLine className="text-green-600 text-2xl" />
+                    <div className="bg-green-50 rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-3 border border-green-200">
+                      <FaChartLine className="text-green-600 text-xl sm:text-2xl shrink-0" />
                       <div>
-                        <p className="text-3xl font-bold text-gray-800">
+                        <p className="text-2xl sm:text-3xl font-bold text-gray-800">
                           {performanceModal.performance.avgScore}%
                         </p>
-                        <p className="text-gray-500 text-sm">Average Score</p>
+                        <p className="text-gray-500 text-xs sm:text-sm">Average Score</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Test Results List */}
                   {performanceModal.performance.results.length === 0 ? (
-                    <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
-                      <FaClipboardList className="text-4xl text-gray-300 mx-auto mb-3" />
-                      <p className="text-gray-500">No test attempts yet.</p>
+                    <div className="bg-gray-50 rounded-lg p-6 sm:p-8 text-center border border-gray-200">
+                      <FaClipboardList className="text-3xl sm:text-4xl text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500 text-sm sm:text-base">No test attempts yet.</p>
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      <h3 className="text-lg font-bold text-gray-800 mb-3">Test Results</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3">Test Results</h3>
                       {performanceModal.performance.results.map((result) => (
                         <div
                           key={result.id}
-                          className="bg-gray-50 border border-gray-200 rounded-lg p-4"
+                          className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4"
                         >
-                          <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-gray-800 font-medium">{result.testName}</h4>
+                          <div className="flex items-center justify-between mb-2 sm:mb-3">
+                            <h4 className="text-gray-800 font-medium text-sm sm:text-base truncate pr-2">{result.testName}</h4>
                             <span
-                              className={`px-3 py-1 rounded-full text-sm font-bold border ${result.score >= 80
+                              className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold border shrink-0 ${result.score >= 80
                                   ? "bg-green-50 text-green-600 border-green-200"
                                   : result.score >= 60
                                     ? "bg-blue-50 text-[#3475d9] border-blue-200"
@@ -370,20 +560,20 @@ const RegisteredUsersPage = () => {
                               {result.score}%
                             </span>
                           </div>
-                          <div className="grid grid-cols-4 gap-4 text-sm">
-                            <div className="flex items-center gap-2 text-green-600">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-xs sm:text-sm">
+                            <div className="flex items-center gap-1 sm:gap-2 text-green-600">
                               <FaCheckCircle />
                               <span>Correct: {result.correct}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-red-600">
+                            <div className="flex items-center gap-1 sm:gap-2 text-red-600">
                               <FaTimesCircle />
                               <span>Wrong: {result.wrong}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-500">
+                            <div className="flex items-center gap-1 sm:gap-2 text-gray-500">
                               <FaClock />
-                              <span>Time: {formatTime(result.timeTaken)}</span>
+                              <span>{formatTime(result.timeTaken)}</span>
                             </div>
-                            <div className="text-gray-500 text-right">
+                            <div className="text-gray-500 sm:text-right">
                               {formatDate(result.date)}
                             </div>
                           </div>
@@ -394,7 +584,7 @@ const RegisteredUsersPage = () => {
                 </>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-red-600">Failed to load performance data.</p>
+                  <p className="text-red-600 text-sm sm:text-base">Failed to load performance data.</p>
                 </div>
               )}
             </div>
@@ -409,9 +599,62 @@ const RegisteredUsersPage = () => {
                     loading: false,
                   })
                 }
-                className="w-full py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300"
+                className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.open && deleteModal.user && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
+            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">Delete User</h2>
+              <button
+                onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
+                className="p-2 text-gray-500 hover:text-gray-700 transition"
+                disabled={deleteModal.deleting}
+              >
+                <FaTimes className="text-xl" />
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-6">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <FaTrash className="text-2xl text-red-600" />
+                </div>
+              </div>
+
+              <p className="text-center text-gray-600 mb-2">
+                Are you sure you want to delete this user?
+              </p>
+              <p className="text-center font-semibold text-gray-800 mb-4">
+                {deleteModal.user.name} ({deleteModal.user.email})
+              </p>
+              <p className="text-center text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+                This action cannot be undone. All user data including test results will be permanently deleted.
+              </p>
+            </div>
+
+            <div className="p-4 border-t border-gray-200 flex gap-3">
+              <button
+                onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
+                disabled={deleteModal.deleting}
+                className="flex-1 py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleteModal.deleting}
+                className="flex-1 py-2.5 sm:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm disabled:opacity-50"
+              >
+                {deleteModal.deleting ? "Deleting..." : "Delete User"}
               </button>
             </div>
           </div>

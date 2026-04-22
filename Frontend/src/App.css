@@ -1,0 +1,5 @@
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #3476d9 transparent;
+}

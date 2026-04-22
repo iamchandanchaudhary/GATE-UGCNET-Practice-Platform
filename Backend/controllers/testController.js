@@ -3,9 +3,9 @@ const TestResult = require("../models/TestResult");
 
 const createTest = async (req, res) => {
   try {
-    const { name, duration, numberOfQuestions, questions } = req.body;
+    const { name, subject, duration, numberOfQuestions, questions } = req.body;
 
-    if (!name || !duration || !numberOfQuestions || !questions) {
+    if (!name || !subject || !duration || !numberOfQuestions || !questions) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -21,6 +21,7 @@ const createTest = async (req, res) => {
 
     const test = new Test({
       name,
+      subject,
       duration,
       numberOfQuestions,
       questions,
@@ -89,7 +90,7 @@ const getTestById = async (req, res) => {
 const updateTest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, duration, numberOfQuestions, questions, isActive } = req.body;
+    const { name, subject, duration, numberOfQuestions, questions, isActive } = req.body;
 
     const test = await Test.findById(id);
 
@@ -101,6 +102,7 @@ const updateTest = async (req, res) => {
     }
 
     if (name) test.name = name;
+    if (subject) test.subject = subject;
     if (duration) test.duration = duration;
     if (numberOfQuestions) test.numberOfQuestions = numberOfQuestions;
     if (questions) test.questions = questions;
@@ -262,6 +264,7 @@ const submitTest = async (req, res) => {
         user: req.user._id,
         test: test._id,
         testName: test.name,
+        subject: test.subject,
         totalQuestions,
         correct,
         wrong,
@@ -307,12 +310,19 @@ const getUserTestResults = async (req, res) => {
   try {
     const results = await TestResult.find({ user: req.user._id })
       .sort({ createdAt: -1 })
-      .select("-answers");
+      .select("-answers")
+      .populate("test", "subject")
+      .lean();
+
+    const normalizedResults = results.map((result) => ({
+      ...result,
+      subject: result.subject || result.test?.subject || "Unknown",
+    }));
 
     res.status(200).json({
       success: true,
-      count: results.length,
-      results,
+      count: normalizedResults.length,
+      results: normalizedResults,
     });
   } catch (error) {
     console.error("Get user test results error:", error);
@@ -327,7 +337,8 @@ const getUserTestResults = async (req, res) => {
 const getUserTestStats = async (req, res) => {
   try {
     const results = await TestResult.find({ user: req.user._id })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .populate("test", "subject");
 
     if (results.length === 0) {
       return res.status(200).json({
@@ -340,6 +351,7 @@ const getUserTestStats = async (req, res) => {
           totalUnanswered: 0,
           performanceTrend: [],
           recentTests: [],
+          subjectPerformance: [],
         },
       });
     }
@@ -370,6 +382,28 @@ const getUserTestStats = async (req, res) => {
       date: r.createdAt,
     }));
 
+    // Subject-wise performance (average score per subject)
+    const subjectStatsMap = results.reduce((acc, r) => {
+      const subjectName = r.subject || r.test?.subject || "Unknown";
+
+      if (!acc[subjectName]) {
+        acc[subjectName] = { totalScore: 0, testsTaken: 0 };
+      }
+
+      acc[subjectName].totalScore += r.score;
+      acc[subjectName].testsTaken += 1;
+
+      return acc;
+    }, {});
+
+    const subjectPerformance = Object.entries(subjectStatsMap)
+      .map(([subject, data]) => ({
+        subject,
+        avgScore: Math.round(data.totalScore / data.testsTaken),
+        testsTaken: data.testsTaken,
+      }))
+      .sort((a, b) => b.avgScore - a.avgScore);
+
     res.status(200).json({
       success: true,
       stats: {
@@ -380,6 +414,7 @@ const getUserTestStats = async (req, res) => {
         totalUnanswered,
         performanceTrend,
         recentTests,
+        subjectPerformance,
       },
     });
   } catch (error) {
