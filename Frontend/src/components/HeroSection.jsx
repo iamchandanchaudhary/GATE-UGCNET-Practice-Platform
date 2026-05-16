@@ -31,7 +31,7 @@ const HeroSection = () => {
                 to="/learning"
                 className="px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:text-[#3475d9] transition-colors duration-200 text-center"
               >
-                Start Learning
+                Learning Guide
               </Link>
             </div>
           </div>

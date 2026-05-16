@@ -34,7 +34,7 @@ const Navbar = () => {
                         <FaGraduationCap className="text-[#01275f] text-4xl sm:text-4xl shrink-0" />
                         <h1 className="text-base sm:text-xl font-bold text-gray-800 truncate flex flex-col sm:flex-row gap-0 sm:gap-3 items-start sm:items-center">
                             <span className="">GATE & UGC-NET </span>
-                            <span className="inline text-[10px] sm:text-xs font-medium text-gray-500 bg-red-50 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border-2 border-gray-400">
+                            <span className="inline text-[10px] sm:text-xs font-medium text-[#3476d9] bg-red-50 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border-2 border-[#3476d9]">
                                 Admin Panel
                             </span>
                         </h1>
@@ -63,16 +63,16 @@ const Navbar = () => {
                     {/* Right Side */}
                     <div className="flex items-center gap-2 sm:gap-4">
                         <span className="hidden sm:flex items-center gap-2">
-                            <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-r from-[#01275f] to-[#3476d9] text-white flex items-center justify-center text-xs sm:text-sm font-bold uppercase">
+                            <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-r from-[#01275f] to-[#3476d9] text-white flex items-center justify-center text-xs sm:text-sm font-bold uppercase">
                                 {admin?.email?.charAt(0) || 'A'}
                             </span>
-                            <span className="text-gray-700 font-medium text-sm hidden md:block truncate max-w-[150px]">
+                            <span className="text-gray-700 font-medium text-sm hidden md:block truncate max-w-40">
                                 {admin?.email}
                             </span>
                         </span>
                         <button
                             onClick={handleLogout}
-                            className="cursor-pointers hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium border-2 border-gray-300 hover:border-red-300 rounded-md text-red-600 bg-red-50 transition-colors duration-200"
+                            className="cursor-pointer hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium border-2 border-gray-300 hover:border-red-300 rounded-md text-red-600 bg-red-50 transition-colors duration-200"
                         >
                             <FaSignOutAlt />
                             <span className="hidden md:block">Logout</span>

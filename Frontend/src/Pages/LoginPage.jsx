@@ -49,7 +49,7 @@ function LoginPage() {
         {/* Card with blue top border */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Blue top accent */}
-          <div className="h-1.5 bg-[#3475d9]"></div>
+          {/* <div className="h-1.5 bg-[#3475d9]"></div> */}
 
           <div className="p-8 pt-10">
             <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
@@ -132,7 +132,7 @@ function LoginPage() {
           </div>
 
           {/* Blue bottom accent */}
-          <div className="h-1.5 bg-[#3475d9]"></div>
+          {/* <div className="h-1.5 bg-[#3475d9]"></div> */}
         </div>
       </div>
     </div>

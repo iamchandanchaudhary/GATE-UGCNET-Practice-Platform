@@ -15,7 +15,7 @@ const sidebarItems = [
   { label: 'Dashboard', icon: HiOutlineViewGrid, path: '/dashboard' },
   { label: 'My Tests', icon: HiOutlineClipboardList, path: '/my-tests' },
   { label: 'Performance Reports', icon: HiOutlineChartBar, path: '/reports' },
-  { label: 'Learning', icon: HiOutlineBookOpen, path: '/learning' },
+  { label: 'Learning Guide', icon: HiOutlineBookOpen, path: '/learning' },
 ];
 
 function Sidebar({ isOpen, onClose }) {

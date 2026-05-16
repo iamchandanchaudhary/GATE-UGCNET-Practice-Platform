@@ -9,7 +9,7 @@ const Navbar = () => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
 
-  const { user, logout } = useAuth();
+  const { user, logout, scrollUp } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const navLinkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors duration-200 ${isActive
-      ? 'text-[#01275f] border-b-2 border-[#01275f] pb-0.5'
+      ? 'text-[#01275f] border-b-2 border-[#01275f] pb-0.5 w-max'
       : 'text-gray-700 border-b-2 border-transparent hover:text-[#01275f] pb-0.5'
     }`;
 
@@ -47,10 +47,10 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 min-w-0">
-            <FaGraduationCap className="text-[#01275f] text-xl sm:text-4xl shrink-0" />
+            <FaGraduationCap className="text-[#01275f] text-2xl sm:text-4xl shrink-0" />
             <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
-              <span className="hidden sm:inline">GATE & UGC NET </span>
-              <span className="sm:hidden">GATE/UGC</span>
+              <span className="inline">GATE & UGC NET </span>
+              {/* <span className="sm:hidden">GATE/UGC</span> */}
               <span className="hidden sm:inline text-base font-normal text-gray-500">
                 Practice Platform
               </span>
@@ -59,13 +59,13 @@ const Navbar = () => {
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8">
-            <NavLink to="/" className={navLinkClass}>
+            <NavLink to="/" className={navLinkClass} onClick={scrollUp}>
               Home
             </NavLink>
-            <NavLink to="/about" className={navLinkClass}>
+            <NavLink to="/about" className={navLinkClass} onClick={scrollUp}>
               About
             </NavLink>
-            <NavLink to="/contact" className={navLinkClass}>
+            <NavLink to="/contact" className={navLinkClass} onClick={scrollUp}>
               Contact Us
             </NavLink>
           </div>
@@ -139,7 +139,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-sm bg-gray-100 hover:bg-gray-50 transition-colors duration-200"
+                  className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:border-[#3476d9] hover:text-[#3476d9] rounded-sm bg-gray-100 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Login
                 </Link>
@@ -155,7 +155,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-700 text-2xl p-1"
+            className="md:hidden text-gray-700 text-2xl p-1 cursor-pointer"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <HiX /> : <HiMenu />}
@@ -164,8 +164,8 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden pb-4 border-t border-gray-100">
-            <div className="flex flex-col gap-3 pt-4 px-2">
+          <div className="md:hidden pb-4">
+            <div className="flex flex-col gap-3 pt-2 px-2">
               <NavLink
                 to="/"
                 className={navLinkClass}
@@ -196,19 +196,20 @@ const Navbar = () => {
                   Dashboard
                 </NavLink>
               )}
-              <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-gray-100">
+              <div className="flex flex-wrap gap-3 mt-1 pt-3">
                 {user ? (
                   <>
                     <span className="flex items-center gap-2 w-full mb-2">
-                      <span className="w-8 h-8 rounded-full bg-[#3475d9] text-white flex items-center justify-center text-sm font-bold uppercase">
+                      <span className="w-8 h-8 rounded-full bg-linear-to-r from-[#01275f] to-[#3476d9] text-white flex items-center justify-center text-sm font-bold uppercase">
                         {user.name?.charAt(0)}
                       </span>
                       <span className="text-gray-700 font-medium text-sm">{user.name}</span>
                     </span>
                     <button
                       onClick={handleLogout}
-                      className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                      className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 border border-red-200 hover:border-red-400 rounded-lg bg-red-50 transition-colors duration-200 w-full"
                     >
+                      <svg xmlns="http://www.w3.org/2000/svg" className='w-5 h-5 fill-red-600' viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
                       Logout
                     </button>
                   </>
@@ -216,14 +217,14 @@ const Navbar = () => {
                   <>
                     <Link
                       to="/login"
-                      className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                      className="px-5 py-2 text-sm font-medium text-gray-700 border-2 border-gray-300 hover:border-[#3476d9] hover:text-[#3476d9] rounded-md bg-gray-50 transition-colors duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Login
                     </Link>
                     <Link
                       to="/signup"
-                      className="px-5 py-2 text-sm font-medium text-white bg-[#3475d9] rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                      className="px-5 py-2 text-sm font-medium text-white bg-linear-to-r from-[#01275f] to-[#3476d9] rounded-md transition-colors duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Sign Up
