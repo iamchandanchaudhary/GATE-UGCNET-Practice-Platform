@@ -276,7 +276,7 @@ function TestPage() {
           {/* Mobile Question Nav Toggle */}
           <button
             onClick={() => setShowQuestionNav(true)}
-            className="lg:hidden p-2 bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors"
+            className="cursor-pointer lg:hidden p-2 bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors"
           >
             <HiOutlineViewGrid className="text-xl" />
           </button>
@@ -467,7 +467,7 @@ function TestPage() {
                 onClick={() => setShowQuestionNav(false)}
                 className="p-1 text-gray-500 hover:text-gray-700"
               >
-                <HiX className="text-xl" />
+                <HiX className="text-xl cursor-pointer" />
               </button>
             </div>
 
@@ -507,7 +507,7 @@ function TestPage() {
             <button
               onClick={handleExitQuizClick}
               disabled={isSubmitting}
-              className="w-full mt-4 border border-red-300 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-lg transition-colors disabled:opacity-60"
+              className="w-full mt-14 cursor-pointer border border-red-300 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-lg transition-colors disabled:opacity-60"
             >
               Exit Quiz
             </button>
@@ -517,7 +517,7 @@ function TestPage() {
                 setShowQuestionNav(false);
                 setShowSubmitConfirm(true);
               }}
-              className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              className="w-full mt-3 bg-linear-to-r from-[#01275f] to-[#3476d9] cursor-pointer text-white font-semibold py-3 rounded-lg transition-colors"
             >
               Submit Test
             </button>

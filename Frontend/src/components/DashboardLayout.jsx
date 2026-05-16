@@ -10,9 +10,9 @@ function DashboardLayout({ children }) {
       {/* Mobile Menu Button - Fixed at top */}
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-20 left-4 z-30 bg-white p-2 rounded-lg shadow-md border border-gray-200 text-gray-600 hover:text-[#3475d9] hover:border-[#3475d9] transition-colors"
+        className="cursor-pointer lg:hidden fixed top-20 left-0 z-30 bg-linear-to-r from-[#01275f] to-[#3476d9] py-2 pr-2 pl-0.5 rounded-e-full transition-colors"
       >
-        <HiMenu className="text-xl" />
+        <svg xmlns="http://www.w3.org/2000/svg" className='w-5 h-5 fill-white' viewBox="0 -960 960 960"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
       </button>
 
       {/* Sidebar */}

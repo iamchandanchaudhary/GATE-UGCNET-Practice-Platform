@@ -289,7 +289,7 @@ const RegisteredUsersPage = () => {
                         <td className="px-6 py-4 text-gray-500">{index + 1}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-[#3475d9] rounded-full flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 bg-linear-to-r from-[#01275f] to-[#3476d9] rounded-full flex items-center justify-center text-white font-bold">
                               {user.name?.charAt(0).toUpperCase() || "U"}
                             </div>
                             <span className="text-gray-800 font-medium">{user.name}</span>
@@ -303,27 +303,24 @@ const RegisteredUsersPage = () => {
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => handleViewDetails(user)}
-                              className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
+                              className="cursor-pointer flex items-center gap-2 px-2 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200"
                               title="View Details"
                             >
                               <FaEye />
-                              <span className="text-sm">Details</span>
                             </button>
                             <button
                               onClick={() => handleViewPerformance(user)}
-                              className="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200"
+                              className="cursor-pointer flex items-center gap-2 px-2 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200"
                               title="View Performance"
                             >
                               <FaChartLine />
-                              <span className="text-sm">Performance</span>
                             </button>
                             <button
                               onClick={() => handleDeleteClick(user)}
-                              className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
+                              className="cursor-pointer flex items-center gap-2 px-2 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200"
                               title="Delete User"
                             >
                               <FaTrash />
-                              <span className="text-sm">Delete</span>
                             </button>
                           </div>
                         </td>
@@ -342,7 +339,7 @@ const RegisteredUsersPage = () => {
                   className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
                 >
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#3475d9] rounded-full flex items-center justify-center text-white font-bold shrink-0">
+                    <div className="w-10 h-10 bg-linear-to-r from-[#01275f] to-[#3476d9] rounded-full flex items-center justify-center text-white font-bold shrink-0">
                       {user.name?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -360,21 +357,21 @@ const RegisteredUsersPage = () => {
                   <div className="flex gap-2 pt-3 border-t border-gray-100">
                     <button
                       onClick={() => handleViewDetails(user)}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200 text-sm"
+                      className="cursor-pointer flex items-center justify-center gap-1.5 px-2 py-2 bg-blue-50 text-[#3475d9] rounded-full hover:bg-blue-100 transition border border-blue-200 text-sm"
                     >
                       <FaEye />
-                      Details
+                      
                     </button>
                     <button
                       onClick={() => handleViewPerformance(user)}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition border border-green-200 text-sm"
+                      className="cursor-pointer flex items-center justify-center gap-1.5 px-2 py-2 bg-green-50 text-green-600 rounded-full hover:bg-green-100 transition border border-green-200 text-sm"
                     >
                       <FaChartLine />
-                      Performance
+                      
                     </button>
                     <button
                       onClick={() => handleDeleteClick(user)}
-                      className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 text-sm"
+                      className="cursor-pointer flex items-center justify-center gap-1.5 px-2 py-2 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition border border-red-200 text-sm"
                     >
                       <FaTrash />
                     </button>
