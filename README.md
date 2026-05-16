@@ -10,7 +10,7 @@
 
 **A comprehensive web-based practice platform for GATE and UGC NET exam preparation**
 
-[🌐 Live Demo](https://gate-ugcnet-practice-platform-1.onrender.com/) | [📖 Documentation](#-project-structure) | [🚀 Quick Start](#-quick-start)
+[🌐 Live Demo](https://gateugcnet.chandanchaudhary.in) | [📖 Documentation](#-project-structure) | [🚀 Quick Start](#-quick-start)
 
 </div>
 

@@ -3,3 +3,18 @@ html {
     scrollbar-width: thin;
     scrollbar-color: #3476d9 transparent;
 }
+
+/* Navbar Styles */
+.nav-opt::after {
+    transition: left 0.3s ease, right 0.3s ease;
+}
+
+.nav-opt:hover::after,
+.nav-opt.active::after {
+    left: 0;
+    right: 0;
+}
+
+.nav-opt.active {
+    color: #3476d9;
+}

@@ -19,9 +19,9 @@ const Navbar = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `text-sm font-medium transition-colors duration-200 ${isActive
-      ? 'text-[#01275f] border-b-2 border-[#01275f] pb-0.5 w-max'
-      : 'text-gray-700 border-b-2 border-transparent hover:text-[#01275f] pb-0.5'
+    `w-max nav-opt relative text-sm font-medium transition-colors duration-200 pb-1 after:content-[""] after:absolute after:h-0.5 after:bottom-0 after:inset-x-2/4 after:bg-[#3476d9] ${isActive
+      ? 'text-[#3476d9]'
+      : 'text-gray-700 hover:text-[#3476d9]'
     }`;
 
   useEffect(() => {
