@@ -7,6 +7,7 @@ import TestListPage from "./pages/TestListPage";
 import RegisteredUsersPage from "./pages/RegisteredUsersPage";
 import Navbar from "./components/Navbar";
 import PageMenu from "./components/PageMenu";
+import './App.css';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAdminAuth();
@@ -47,7 +48,7 @@ const PublicRoute = ({ children }) => {
 // Layout component for protected pages with Navbar and optional PageMenu
 const ProtectedLayout = ({ children, showPageMenu = false }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-gray-100 to-blue-50">
+    <div className="min-h-screen bg-linear-to-r from-[#bbdcfc] via-[#e9e4fc] to-[#d6d6fe]">
       <Navbar />
       {showPageMenu && <PageMenu />}
       {children}

@@ -16,7 +16,7 @@ const PageMenu = () => {
         }`;
 
     return (
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-linear-to-r from-[#bbdcfc] via-[#e9e4fc] to-[#d6d6fe] shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-wrap items-center gap-2 py-3">
                     {menuItems.map((item) => (

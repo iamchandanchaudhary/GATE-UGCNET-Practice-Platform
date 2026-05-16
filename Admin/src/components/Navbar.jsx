@@ -16,17 +16,16 @@ const Navbar = () => {
         }`;
 
     return (
-        <nav className="bg-white shadow-sm sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+        <nav className="bg-linear-to-r from-[#bbdcfc] via-[#e9e4fc] to-[#d6d6fe] shadow-sm sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-4">
+                <div className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link to="/dashboard" className="flex items-center gap-2 min-w-0">
-                        <FaGraduationCap className="text-[#3475d9] text-xl sm:text-2xl shrink-0" />
-                        <h1 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
-                            <span className="hidden sm:inline">Admin Panel </span>
-                            <span className="sm:hidden">Admin</span>
-                            <span className="hidden md:inline text-sm font-normal text-gray-500">
-                                GATE & UGC-NET
+                    <Link to="/dashboard" className="flex items-center gap-3 min-w-0">
+                        <FaGraduationCap className="text-[#3475d9] text-3xl sm:text-4xl shrink-0" />
+                        <h1 className="text-base sm:text-xl font-bold text-gray-800 truncate flex flex-col sm:flex-row gap-0 sm:gap-2 items-start sm:items-end">
+                            <span className="inline">GATE & UGC-NET </span>
+                            <span className="inline text-xs sm:text-sm font-medium text-gray-500">
+                                Admin Panel
                             </span>
                         </h1>
                     </Link>
@@ -54,7 +53,7 @@ const Navbar = () => {
                     {/* Right Side */}
                     <div className="flex items-center gap-2 sm:gap-4">
                         <span className="hidden sm:flex items-center gap-2">
-                            <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#3475d9] text-white flex items-center justify-center text-xs sm:text-sm font-bold uppercase">
+                            <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-r from-[#01275f] to-[#3476d9] text-white flex items-center justify-center text-xs sm:text-sm font-bold uppercase">
                                 {admin?.email?.charAt(0) || 'A'}
                             </span>
                             <span className="text-gray-700 font-medium text-sm hidden md:block truncate max-w-[150px]">
