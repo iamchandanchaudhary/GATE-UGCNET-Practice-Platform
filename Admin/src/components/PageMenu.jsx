@@ -11,7 +11,7 @@ const PageMenu = () => {
     const navLinkClass = ({ isActive }) =>
         `flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
             isActive
-                ? 'text-white bg-[#3475d9]'
+                ? 'text-white bg-gradient-to-r from-[#01275f] to-[#3476d9]'
                 : 'text-gray-600 hover:text-[#3475d9] hover:bg-blue-50'
         }`;
 

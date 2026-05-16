@@ -29,10 +29,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-blue-50 px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-[#bbdcfc] via-[#e9e4fc] to-[#d6d6fe] px-4 py-8">
       <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#3475d9] mb-3 sm:mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-r from-[#01275f] to-[#3476d9] mb-3 sm:mb-4">
             <FaGraduationCap className="text-white text-xl sm:text-2xl" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Admin Login</h1>
@@ -90,7 +90,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#3475d9] hover:bg-[#236ddb] text-white font-semibold py-3 rounded-lg transition duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full bg-gradient-to-r from-[#01275f] to-[#3476d9] hover:shadow-lg text-white font-semibold py-3 rounded-lg transition duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
             {loading ? "Logging in..." : "Login"}
           </button>

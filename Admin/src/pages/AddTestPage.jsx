@@ -332,7 +332,7 @@ const AddTestPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                className="cursor-pointer px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-[#01275f] to-[#3476d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm hover:shadow-lg transition-all duration-200"
               >
                 {loading ? (
                   "Creating..."

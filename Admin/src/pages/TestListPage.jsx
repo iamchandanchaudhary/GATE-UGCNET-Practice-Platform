@@ -207,7 +207,7 @@ const TestListPage = () => {
 
             <Link
               to="/add-test"
-              className="bg-[#3475d9] hover:bg-[#236ddb] text-white px-4 py-2 rounded-md transition text-sm text-center"
+              className="bg-gradient-to-r from-[#01275f] to-[#3476d9] transition-all duration-200 text-white px-4 py-2 rounded-md text-sm text-center"
             >
               + Add New Test
             </Link>
@@ -235,7 +235,7 @@ const TestListPage = () => {
             </p>
             <Link
               to="/add-test"
-              className="inline-block bg-[#3475d9] hover:bg-[#236ddb] text-white px-6 py-3 rounded-lg transition text-sm"
+              className="inline-block bg-gradient-to-r from-[#01275f] to-[#3476d9] text-white px-6 py-3 rounded-lg text-sm hover:shadow-lg transition-all duration-200"
             >
               Create Your First Test
             </Link>
@@ -264,7 +264,7 @@ const TestListPage = () => {
             {filteredTests.map((test) => (
               <div
                 key={test._id}
-                className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:border-[#3475d9] hover:shadow-sm transition shadow-sm"
+                className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-sm transition"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                   <div className="flex-1 min-w-0">
@@ -303,7 +303,7 @@ const TestListPage = () => {
                   <div className="flex items-center gap-2 sm:gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                     <button
                       onClick={() => handleView(test._id)}
-                      className="flex-1 sm:flex-none p-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200 flex items-center justify-center gap-1"
+                      className="cursor-pointer flex-1 sm:flex-none p-2 bg-blue-50 text-[#3475d9] rounded-lg hover:bg-blue-100 transition border border-blue-200 flex items-center justify-center gap-1"
                       title="View"
                     >
                       <FaEye />
@@ -312,7 +312,7 @@ const TestListPage = () => {
 
                     <button
                       onClick={() => handleEdit(test._id)}
-                      className="flex-1 sm:flex-none p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition border border-yellow-200 flex items-center justify-center gap-1"
+                      className="cursor-pointer flex-1 sm:flex-none p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition border border-yellow-200 flex items-center justify-center gap-1"
                       title="Edit"
                     >
                       <FaEdit />
@@ -321,7 +321,7 @@ const TestListPage = () => {
 
                     <button
                       onClick={() => setDeleteModal({ open: true, test })}
-                      className="flex-1 sm:flex-none p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 flex items-center justify-center gap-1"
+                      className="cursor-pointer flex-1 sm:flex-none p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 flex items-center justify-center gap-1"
                       title="Delete"
                     >
                       <FaTrash />
@@ -370,13 +370,13 @@ const TestListPage = () => {
             <div className="flex justify-end gap-3 sm:gap-4">
               <button
                 onClick={() => setDeleteModal({ open: false, test: null })}
-                className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
+                className="cursor-pointer px-4 py-2 bg-white text-gray-700 rounded-md hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm"
+                className="cursor-pointer px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm"
               >
                 Delete
               </button>
@@ -393,13 +393,13 @@ const ViewModal = ({ test, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
       <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+        <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-lg sm:text-2xl font-bold text-gray-800 truncate pr-4">{test.name}</h2>
           <button
             onClick={onClose}
             className="p-2 text-gray-500 hover:text-gray-700 transition shrink-0"
           >
-            <FaTimes className="text-xl" />
+            <FaTimes className="text-xl cursor-pointer" />
           </button>
         </div>
 
@@ -452,10 +452,10 @@ const ViewModal = ({ test, onClose }) => {
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200">
+        <div className="px-4 py-2">
           <button
             onClick={onClose}
-            className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
+            className="cursor-pointer w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
           >
             Close
           </button>
@@ -550,13 +550,13 @@ const EditModal = ({ test, token, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
       <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+        <div className="px-6 py-3 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-lg sm:text-2xl font-bold text-gray-800">Edit Test</h2>
           <button
             onClick={onClose}
             className="p-2 text-gray-500 hover:text-gray-700 transition"
           >
-            <FaTimes className="text-xl" />
+            <FaTimes className="text-xl cursor-pointer" />
           </button>
         </div>
 
@@ -673,17 +673,17 @@ const EditModal = ({ test, token, onClose, onSave }) => {
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
+        <div className="px-4 py-3 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
           <button
             onClick={onClose}
-            className="px-4 sm:px-6 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
+            className="cursor-pointer px-4 sm:px-6 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="px-4 sm:px-6 py-2 bg-[#3475d9] text-white rounded-lg hover:bg-[#236ddb] transition disabled:bg-blue-300 text-sm"
+            className="cursor-pointer px-4 sm:px-6 py-2 bg-gradient-to-r from-[#01275f] to-[#3476d9] hover:shadow-lg transition-all duration-200 text-white rounded-lg disabled:bg-blue-300 text-sm"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

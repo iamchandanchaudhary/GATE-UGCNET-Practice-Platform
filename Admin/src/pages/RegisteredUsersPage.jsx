@@ -389,20 +389,20 @@ const RegisteredUsersPage = () => {
       {/* Details Modal */}
       {detailsModal.open && detailsModal.user && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-3xl px-4 overflow-hidden shadow-xl">
-            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+          <div className="bg-white border border-gray-200 rounded-xl w-full max-w-3xl overflow-hidden shadow-xl">
+            <div className="py-3 px-8 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800">User Details</h2>
               <button
                 onClick={() => setDetailsModal({ open: false, user: null })}
                 className="p-2 text-gray-500 hover:text-gray-700 transition"
               >
-                <FaTimes className="text-xl" />
+                <FaTimes className="text-xl cursor-pointer" />
               </button>
             </div>
 
             <div className="p-2 sm:p-6">
               <div className="flex justify-center mb-4 sm:mb-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#3475d9] rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-[#01275f] to-[#3476d9] rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                   {detailsModal.user.name?.charAt(0).toUpperCase() || "U"}
                 </div>
               </div>
@@ -469,7 +469,7 @@ const RegisteredUsersPage = () => {
             <div className="p-4 border-t border-gray-200">
               <button
                 onClick={() => setDetailsModal({ open: false, user: null })}
-                className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
+                className="cursor-pointer w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Close
               </button>
@@ -482,7 +482,7 @@ const RegisteredUsersPage = () => {
       {performanceModal.open && performanceModal.user && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
           <div className="bg-white border border-gray-200 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-xl">
-            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+            <div className="py-3 px-6 border-b border-gray-200 flex justify-between items-center">
               <div className="min-w-0">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800">Performance Report</h2>
                 <p className="text-gray-500 text-xs sm:text-sm truncate">{performanceModal.user.name}</p>
@@ -498,7 +498,7 @@ const RegisteredUsersPage = () => {
                 }
                 className="p-2 text-gray-500 hover:text-gray-700 transition shrink-0"
               >
-                <FaTimes className="text-xl" />
+                <FaTimes className="text-xl cursor-pointer" />
               </button>
             </div>
 
@@ -589,7 +589,7 @@ const RegisteredUsersPage = () => {
               )}
             </div>
 
-            <div className="p-4 border-t border-gray-200">
+            <div className="px-4 py-3 border-t border-gray-200">
               <button
                 onClick={() =>
                   setPerformanceModal({
@@ -599,7 +599,7 @@ const RegisteredUsersPage = () => {
                     loading: false,
                   })
                 }
-                className="w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
+                className="cursor-pointer w-full py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm"
               >
                 Close
               </button>
@@ -612,14 +612,14 @@ const RegisteredUsersPage = () => {
       {deleteModal.open && deleteModal.user && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white border border-gray-200 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
-            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
+            <div className="py-3 px-6 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800">Delete User</h2>
               <button
                 onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
                 className="p-2 text-gray-500 hover:text-gray-700 transition"
                 disabled={deleteModal.deleting}
               >
-                <FaTimes className="text-xl" />
+                <FaTimes className="text-xl cursor-pointer" />
               </button>
             </div>
 
@@ -645,14 +645,14 @@ const RegisteredUsersPage = () => {
               <button
                 onClick={() => setDeleteModal({ open: false, user: null, deleting: false })}
                 disabled={deleteModal.deleting}
-                className="flex-1 py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm disabled:opacity-50"
+                className="cursor-pointer flex-1 py-2.5 sm:py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition border border-gray-300 text-sm disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteConfirm}
                 disabled={deleteModal.deleting}
-                className="flex-1 py-2.5 sm:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm disabled:opacity-50"
+                className="cursor-pointer flex-1 py-2.5 sm:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm disabled:opacity-50"
               >
                 {deleteModal.deleting ? "Deleting..." : "Delete User"}
               </button>
