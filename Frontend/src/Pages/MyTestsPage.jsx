@@ -109,7 +109,7 @@ function MyTestsPage() {
         </div>
         <Link
           to="/start-test"
-          className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200 text-sm lg:text-base"
+          className="bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200 text-sm lg:text-base"
         >
           <HiOutlinePlay className="text-lg" />
           Start New Test
@@ -160,7 +160,7 @@ function MyTestsPage() {
           <p className="text-gray-500 mb-4">Start taking tests to see your results here.</p>
           <Link
             to="/start-test"
-            className="inline-flex items-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
           >
             <HiOutlinePlay />
             Start a Test

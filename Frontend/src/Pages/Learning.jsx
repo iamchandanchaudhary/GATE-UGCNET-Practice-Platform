@@ -97,7 +97,7 @@ function Learning() {
             <Link
               to="/start-test"
               onClick={scrollUp}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3475d9] px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-linear-to-r from-[#01275f] to-[#3476d9] px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
             >
               <HiOutlinePlay className="text-base" />
               Start Practice Test

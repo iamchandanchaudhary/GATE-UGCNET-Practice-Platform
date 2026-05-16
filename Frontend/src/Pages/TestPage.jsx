@@ -305,14 +305,14 @@ function TestPage() {
           <button
             onClick={handleExitQuizClick}
             disabled={isSubmitting}
-            className="hidden sm:block border border-red-300 text-red-600 hover:bg-red-50 font-semibold px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-60 text-sm lg:text-base"
+            className="hidden sm:block border border-red-300 text-red-600 hover:bg-red-50 font-semibold px-3 lg:px-6 py-1.5 lg:py-2 rounded-md transition-colors cursor-pointer disabled:opacity-60 text-sm lg:text-base"
           >
             Exit Quiz
           </button>
           <button
             onClick={() => setShowSubmitConfirm(true)}
             disabled={isSubmitting}
-            className="hidden sm:block bg-green-600 hover:bg-green-700 text-white font-semibold px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
+            className="hidden sm:block bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold px-3 lg:px-6 py-1.5 lg:py-2 rounded-md transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
@@ -412,7 +412,7 @@ function TestPage() {
               <button
                 onClick={() => setCurrentQ((c) => Math.max(0, c - 1))}
                 disabled={currentQ === 0}
-                className="flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-sm lg:text-base"
+                className="flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:text-[#3475d9] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-sm lg:text-base"
               >
                 <HiOutlineChevronLeft />
                 <span className="hidden sm:inline">Previous</span>
@@ -422,7 +422,7 @@ function TestPage() {
               <button
                 onClick={() => setShowSubmitConfirm(true)}
                 disabled={isSubmitting}
-                className="sm:hidden flex-1 mx-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm"
+                className="sm:hidden flex-1 mx-2 bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold py-2 rounded-lg transition-colors cursor-pointer disabled:bg-green-400 text-sm"
               >
                 Submit
               </button>
@@ -430,7 +430,7 @@ function TestPage() {
               {currentQ < questions.length - 1 ? (
                 <button
                   onClick={() => setCurrentQ((c) => c + 1)}
-                  className="flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-[#3475d9] hover:bg-blue-700 text-white font-medium transition-colors cursor-pointer text-sm lg:text-base"
+                  className="flex items-center gap-1 px-3 lg:px-6 py-2 lg:py-2.5 rounded-lg bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-medium transition-colors cursor-pointer text-sm lg:text-base"
                 >
                   <span className="hidden sm:inline">Next</span>
                   <HiOutlineChevronRight />
@@ -439,7 +439,7 @@ function TestPage() {
                 <button
                   onClick={() => setShowSubmitConfirm(true)}
                   disabled={isSubmitting}
-                  className="hidden sm:flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
+                  className="hidden sm:flex items-center gap-1 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-medium transition-colors cursor-pointer disabled:bg-green-400 text-sm lg:text-base"
                 >
                   Submit Test
                 </button>
@@ -529,7 +529,7 @@ function TestPage() {
       {showSubmitConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="bg-blue-600 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+            <div className="bg-linear-to-r from-[#01275f] to-[#3476d9] px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
               <h3 className="text-base lg:text-lg font-bold text-white">Submit Test</h3>
               <button
                 onClick={() => setShowSubmitConfirm(false)}
@@ -568,7 +568,7 @@ function TestPage() {
               <button
                 onClick={() => {handleFinish(); scrollUp()}}
                 disabled={isSubmitting}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-blue-400 text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-sm bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-medium transition-colors cursor-pointer disabled:bg-blue-400 text-sm"
               >
                 {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
               </button>

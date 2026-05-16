@@ -189,7 +189,7 @@ function StartTestPage() {
 
               <button
                 onClick={() => handleStartTest(test)}
-                className="w-full flex items-center justify-center gap-2 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 cursor-pointer text-sm lg:text-base"
+                className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold px-4 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 cursor-pointer text-sm lg:text-base"
               >
                 <HiOutlinePlay className="text-lg" />
                 Start Test
@@ -202,9 +202,9 @@ function StartTestPage() {
       {/* Confirmation Modal */}
       {showConfirm && selectedTest && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
             {/* Modal Header */}
-            <div className="bg-[#3475d9] px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+            <div className="bg-linear-to-r from-[#01275f] to-[#3476d9] px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
               <h3 className="text-base lg:text-lg font-bold text-white">Confirm Start Test</h3>
               <button
                 onClick={handleCancel}
@@ -252,13 +252,13 @@ function StartTestPage() {
             <div className="px-4 lg:px-6 py-3 lg:py-4 bg-gray-50 flex items-center justify-end gap-3">
               <button
                 onClick={handleCancel}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-md border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-colors cursor-pointer text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={() => { handleConfirm(); scrollUp() }}
-                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-lg bg-[#3475d9] text-white font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer text-sm"
+                className="px-4 lg:px-5 py-2 lg:py-2.5 rounded-md bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-medium transition-colors flex items-center gap-2 cursor-pointer text-sm"
               >
                 <HiOutlinePlay className="text-lg" />
                 Yes, Start Test
