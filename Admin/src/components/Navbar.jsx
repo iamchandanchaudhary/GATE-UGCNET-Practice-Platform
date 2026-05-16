@@ -31,7 +31,7 @@ const Navbar = () => {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link to="/dashboard" className="flex items-center gap-3 min-w-0">
-                        <FaGraduationCap className="text-[#3475d9] text-4xl sm:text-4xl shrink-0" />
+                        <FaGraduationCap className="text-[#01275f] text-4xl sm:text-4xl shrink-0" />
                         <h1 className="text-base sm:text-xl font-bold text-gray-800 truncate flex flex-col sm:flex-row gap-0 sm:gap-3 items-start sm:items-center">
                             <span className="">GATE & UGC-NET </span>
                             <span className="inline text-[10px] sm:text-xs font-medium text-gray-500 bg-red-50 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border-2 border-gray-400">

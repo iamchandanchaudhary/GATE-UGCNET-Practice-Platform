@@ -148,7 +148,7 @@ function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full py-3.5 bg-linear-to-r from-[#01275f] to-[#3476d9] cursor-pointer text-white font-semibold rounded-lg transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating Account...' : 'Sign Up'}
               </button>

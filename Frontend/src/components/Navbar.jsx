@@ -20,8 +20,8 @@ const Navbar = () => {
 
   const navLinkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors duration-200 ${isActive
-      ? 'text-[#3475d9] border-b-2 border-[#3475d9] pb-0.5'
-      : 'text-gray-700 border-b-2 border-transparent hover:text-[#3475d9] pb-0.5'
+      ? 'text-[#01275f] border-b-2 border-[#01275f] pb-0.5'
+      : 'text-gray-700 border-b-2 border-transparent hover:text-[#01275f] pb-0.5'
     }`;
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 min-w-0">
-            <FaGraduationCap className="text-[#3475d9] text-xl sm:text-2xl shrink-0" />
+            <FaGraduationCap className="text-[#01275f] text-xl sm:text-4xl shrink-0" />
             <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
               <span className="hidden sm:inline">GATE & UGC NET </span>
               <span className="sm:hidden">GATE/UGC</span>
@@ -75,7 +75,7 @@ const Navbar = () => {
             {user ? (
               <div ref={profileDropdownRef} className="relative cursor-pointer">
                 <span onClick={() => setProfileDropdown(!profileDropdown)} className="flex items-center gap-2">
-                  <span className="w-9 h-9 rounded-full bg-[#3475d9] text-white flex items-center justify-center text-sm font-bold uppercase">
+                  <span className="w-9 h-9 rounded-full bg-linear-to-r from-[#01275f] to-[#3476d9] text-white flex items-center justify-center text-sm font-bold uppercase">
                     {user.name?.charAt(0)}
                   </span>
                   <span className="text-gray-700 font-medium text-base hidden lg:block">Hello, {user.name?.split(' ')[0] || 'User'}</span>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-5 py-2 text-sm font-medium text-white rounded-sm bg-[#3475d9] hover:bg-[#236ddb] transition-colors duration-200"
+                  className="px-5 py-2 text-sm font-medium text-white rounded-sm bg-linear-to-r from-[#01275f] to-[#3476d9] transition-colors duration-200"
                 >
                   Sign Up
                 </Link>
