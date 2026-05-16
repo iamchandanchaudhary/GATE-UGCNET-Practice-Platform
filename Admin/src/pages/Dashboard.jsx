@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mt-12">
       <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-6xl font-bold text-gray-800 mb-2 sm:mb-4">Admin <span className="bg-gradient-to-r from-[#01275f] to-[#3476d9] bg-clip-text text-transparent">Dashboard</span></h2>
+        <h2 className="text-4xl sm:text-6xl font-bold text-gray-800 mb-2 sm:mb-4">Admin <span className="bg-gradient-to-r from-[#01275f] to-[#3476d9] bg-clip-text text-transparent">Dashboard</span></h2>
         <p className="text-gray-500 text-sm sm:text-base">Manage your tests, questions, and users from here</p>
       </div>
 
