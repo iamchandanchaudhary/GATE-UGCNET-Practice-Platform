@@ -81,7 +81,7 @@ function Sidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Bottom sidebar links */}
-        <div className="border-t border-gray-600/70 py-4">
+        <div className="border-t border-gray-500/70 py-4">
           <Link
             to="/profile"
             onClick={() => {handleNavClick(); scrollUp()}}
@@ -96,7 +96,7 @@ function Sidebar({ isOpen, onClose }) {
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center cursor-pointer gap-3 px-6 py-3 text-sm font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 w-full transition-colors duration-150"
+            className="flex items-center cursor-pointer gap-3 px-6 py-3 text-sm font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 border-l-4 border-transparent hover:border-red-600 w-full transition-colors duration-150"
           >
             <HiOutlineLogout className="text-lg" />
             Logout

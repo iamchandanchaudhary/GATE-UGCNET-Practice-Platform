@@ -167,7 +167,7 @@ function ProfilePage() {
         {!editing ? (
           <button
             onClick={() => setEditing(true)}
-            className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200 text-sm lg:text-base"
+            className="bg-linear-to-r from-[#01275f] to-[#3476d9] cursor-pointer text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200 text-sm lg:text-base"
           >
             <HiOutlinePencil className="text-lg" />
             Edit Profile
@@ -181,15 +181,16 @@ function ProfilePage() {
                 setSuccess('');
               }}
               disabled={saving}
-              className="border border-gray-300 text-gray-600 hover:bg-gray-50 font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base disabled:opacity-50"
+              className="border border-gray-300 text-gray-600 cursor-pointer hover:bg-gray-50 font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="bg-[#3475d9] hover:bg-blue-700 text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base disabled:opacity-50"
+              className="flex items-center bg-linear-to-r from-[#01275f] to-[#3476d9] cursor-pointer text-white font-semibold px-4 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base disabled:opacity-50"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className='h-5 w-5 fill-white mr-1.5' viewBox="0 -960 960 960"><path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" /></svg>
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>

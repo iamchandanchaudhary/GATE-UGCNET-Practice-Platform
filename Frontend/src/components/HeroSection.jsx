@@ -22,7 +22,7 @@ const HeroSection = () => {
               <Link
                 to={user ? '/dashboard' : '/login'}
                 onClick={scrollUp}
-                className="px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-[#01275f] to-[#3476d9] rounded-lg transition-colors duration-200 hover:shadow-lg shadow-blue-200 text-center"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white bg-linear-to-r from-[#01275f] to-[#3476d9] rounded-lg transition-colors duration-200 hover:shadow-lg shadow-blue-200 text-center"
               >
                 Start Practicing
               </Link>

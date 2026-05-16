@@ -12,7 +12,7 @@ const contactInfo = [
   {
     icon: HiOutlineMail,
     title: 'Email Us',
-    detail: 'support@gatenet-practice.in',
+    detail: 'chandanchaudhary533@gmail.com',
     subtext: 'We reply within 24 hours',
   },
   {
@@ -66,7 +66,7 @@ const ContactPage = () => {
   return (
     <div className="bg-white">
       {/* Hero Header */}
-      <section className="bg-gradient-to-br from-[#3475d9] to-blue-800 text-white py-16 md:py-20">
+      <section className="bg-linear-to-br from-[#3475d9] to-blue-800 text-white py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full">
             We're here to help
@@ -93,7 +93,7 @@ const ContactPage = () => {
               </div>
               <div>
                 <h3 className="font-bold text-gray-800 text-sm">{info.title}</h3>
-                <p className="text-gray-700 text-sm font-medium mt-0.5">{info.detail}</p>
+                <p className="text-gray-700 text-xs font-medium mt-0.5">{info.detail}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{info.subtext}</p>
               </div>
             </div>
@@ -157,7 +157,7 @@ const ContactPage = () => {
                       <input
                         type="email"
                         name="email"
-                        placeholder="you@example.com"
+                        placeholder="Enter email"
                         value={form.email}
                         onChange={handleChange}
                         required
@@ -201,7 +201,7 @@ const ContactPage = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-[#3475d9] hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3.5 bg-linear-to-r from-[#01275f] to-[#3476d9] text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Send Message
                     <HiOutlineArrowRight />
@@ -227,14 +227,14 @@ const ContactPage = () => {
             </div>
 
             {/* Extra CTA */}
-            <div className="mt-6 bg-gradient-to-br from-[#3475d9] to-blue-700 rounded-2xl p-6 text-white text-center">
+            <div className="mt-6 bg-linear-to-r from-[#01275f] to-[#3476d9] rounded-lg p-6 text-white text-center">
               <h3 className="text-lg font-bold mb-2">Need Immediate Help?</h3>
               <p className="text-blue-100 text-sm mb-4">
                 Our support team is available Mon–Sat, 9 AM – 6 PM IST.
               </p>
               <a
-                href="mailto:support@gatenet-practice.in"
-                className="inline-flex items-center gap-2 bg-white text-[#3475d9] font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-50 transition-colors text-sm"
+                href="mailto:chandanchaudhary533@gmail.com"
+                className="inline-flex items-center gap-2 bg-white text-[#01275f] font-semibold px-5 py-2.5 rounded-md hover:bg-blue-50 transition-colors text-sm"
               >
                 <HiOutlineMail />
                 Email Support

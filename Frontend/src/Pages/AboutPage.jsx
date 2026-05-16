@@ -68,7 +68,7 @@ const AboutPage = () => {
   return (
     <div className="bg-linear-to-r from-[#dcecff] via-[#eef4ff] to-[#f3efff]">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#3475d9] to-blue-800 text-white">
+      <section className="relative bg-linear-to-r from-[#01275f] to-[#3476d9] text-white">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTRWMjhIMjR2MmgxMnptMC0yMFYySDI0djhoMTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-3xl mx-auto text-center">
@@ -134,7 +134,7 @@ const AboutPage = () => {
               you every step of the way.
             </p>
           </div>
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-10">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-10">
             <div className="space-y-5">
               {[
                 { emoji: '🎯', text: 'Focused, exam-aligned practice for GATE CS & UGC NET' },
@@ -156,7 +156,7 @@ const AboutPage = () => {
       <section className="py-10 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#3475d9] bg-blue-50 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#3475d9] bg-blue-200/30 px-4 py-1.5 rounded-full">
               Why Choose Us
             </span>
             <h2 className="text-3xl font-bold text-gray-800 mt-4">
@@ -215,7 +215,7 @@ const AboutPage = () => {
       </section> */}
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-[#3475d9] to-blue-700 py-16">
+      <section className="bg-linear-to-r from-[#01275f] to-[#3476d9] py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Start Your Preparation?
@@ -226,7 +226,7 @@ const AboutPage = () => {
           <div className="flex items-center justify-center gap-4">
             <Link
               to="/signup"
-              className="bg-white text-[#3475d9] font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
+              className="bg-white text-[#01275f] font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
             >
               Get Started Free
               <HiOutlineArrowRight />

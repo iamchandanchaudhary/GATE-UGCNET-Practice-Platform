@@ -281,7 +281,7 @@ function TestPage() {
             <HiOutlineViewGrid className="text-xl" />
           </button>
           <div>
-            <h1 className="text-sm lg:text-lg font-bold text-gray-800 truncate max-w-[150px] sm:max-w-none">
+            <h1 className="text-sm lg:text-lg font-bold text-gray-800 truncate max-w-36 sm:max-w-none">
               {test?.name || 'Practice Test'}
             </h1>
             <p className="text-xs text-gray-500">
@@ -321,7 +321,7 @@ function TestPage() {
 
       <div className="flex flex-1">
         {/* Question Navigation Panel - Desktop */}
-        <aside className="hidden lg:block w-56 pt-24 bg-white border-r border-gray-200 p-4 fixed top-[61px] bottom-0 left-0 overflow-y-auto">
+        <aside className="hidden lg:block w-56 pt-24 bg-white border-r border-gray-200 p-4 fixed top-16 bottom-0 left-0 overflow-y-auto">
           <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">
             Questions
           </h3>
