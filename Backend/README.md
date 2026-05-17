@@ -35,27 +35,29 @@ The Backend module is a Node.js/Express REST API server that handles all busines
 ```
 Backend/
 ├── config/
-│   └── connectDB.js       # MongoDB connection configuration
+│   └── connectDB.js         # MongoDB connection configuration
 ├── controllers/
-│   ├── adminController.js  # Admin authentication logic
-│   ├── authController.js   # User authentication logic
-│   ├── testController.js   # Test management logic
-│   └── userController.js   # User management logic
+│   ├── adminController.js   # Admin authentication and management logic
+│   ├── authController.js    # User authentication logic
+│   ├── testController.js    # Test management and submission logic
+│   └── userController.js    # User profile and statistics logic
 ├── middleware/
-│   ├── adminAuth.js        # Admin authentication middleware
-│   └── userAuth.js         # User authentication middleware
+│   ├── adminAuth.js         # Admin JWT authentication middleware
+│   └── userAuth.js          # User JWT authentication middleware (required & optional)
 ├── models/
-│   ├── Test.js             # Test and Question schema
-│   ├── TestResult.js       # Test result schema
-│   └── User.js             # User schema
+│   ├── Test.js              # Test and Question schema definition
+│   ├── TestResult.js        # Test result and answers schema
+│   └── User.js              # User profile and authentication schema
 ├── routes/
-│   ├── adminRoutes.js      # Admin API routes
-│   ├── authRoutes.js       # Authentication routes
-│   ├── testRoutes.js       # Test API routes
-│   └── userRoutes.js       # User API routes
-├── .env                    # Environment variables
-├── index.js                # Application entry point
-└── package.json            # Dependencies and scripts
+│   ├── adminRoutes.js       # Admin-only API routes
+│   ├── authRoutes.js        # Public authentication routes
+│   ├── testRoutes.js        # Test CRUD and submission routes
+│   └── userRoutes.js        # User profile and stats routes
+├── .env                     # Environment variables (not in git)
+├── .gitignore               # Git ignore rules
+├── index.js                 # Express app entry point
+├── package.json             # Dependencies and scripts
+└── README.md                # Backend documentation
 ```
 
 ---
@@ -91,14 +93,15 @@ cd Backend
 npm install
 
 # Create .env file with the following variables:
-# PORT=5000
-# MONGODB_URI=mongodb://localhost:27017/gate-ugcnet
-# JWT_SECRET=your_super_secret_jwt_key
-# ADMIN_EMAIL=admin@example.com
-# ADMIN_PASSWORD=your_admin_password
+PORT=8080
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/gate-ugcnet
+JWT_SECRET=your_super_secret_jwt_key_2026
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your_admin_password
 
-# Start development server
+# Start the server
 npm start
+# Server will be available at http://localhost:8080
 ```
 
 ### Available Scripts
@@ -111,19 +114,61 @@ npm start
 
 ## 🔗 API Endpoints
 
-### Authentication (`/api/auth`)
+### Authentication Routes (`/api/auth`)
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/register` | Register new user | No |
-| POST | `/login` | User login | No |
+| Method | Endpoint | Description | Auth Required | Request Body |
+|--------|----------|-------------|---|---|
+| POST | `/register` | Register new user | No | `{ email, password, name }` |
+| POST | `/login` | User login | No | `{ email, password }` |
 
-### Admin (`/api/admin`)
+### Admin Routes (`/api/admin`)
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---|
 | POST | `/login` | Admin login | No |
-| GET | `/verify` | Verify admin token | Admin |
+| GET | `/verify` | Verify admin token & get admin info | Admin Only |
+
+### Test Routes (`/api/tests`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---|
+| POST | `/create` | Create new test | Admin Only |
+| GET | `/all` | Get all tests (admin) | Admin Only |
+| GET | `/:id` | Get test by ID | Admin Only |
+| PUT | `/update/:id` | Update test | Admin Only |
+| DELETE | `/delete/:id` | Delete test | Admin Only |
+| GET | `/active/list` | Get all active tests | No |
+| GET | `/attempt/:testId` | Get test for attempt | User Only |
+| POST | `/submit` | Submit test answers | User Only |
+| GET | `/results/user` | Get user's test results | User Only |
+| GET | `/stats/user` | Get user's test statistics | User Only |
+
+### User Routes (`/api/users`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---|
+| GET | `/profile` | Get user profile | User Only |
+| PUT | `/profile/update` | Update user profile | User Only |
+| GET | `/stats` | Get user statistics | User Only |
+
+## 🔐 Environment Variables
+
+| Variable | Description | Example |
+|----------|-------------|--------|
+| `PORT` | Server port | `8080` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net/db` |
+| `JWT_SECRET` | Secret key for JWT tokens | `your_super_secret_jwt_key_2026` |
+| `ADMIN_EMAIL` | Admin login email | `admin@example.com` |
+| `ADMIN_PASSWORD` | Admin login password | `password123` |
+
+## 🔒 Authentication
+
+The API uses JWT (JSON Web Tokens) for authentication:
+
+1. **User Authentication**: Users register/login and receive a JWT token
+2. **Admin Authentication**: Admins login separately and receive an admin JWT token
+3. **Token Storage**: Tokens are sent via HTTP headers: `Authorization: Bearer <token>`
+4. **Token Validation**: Middleware validates tokens before allowing access to protected routes
 
 ### Tests (`/api/tests`)
 

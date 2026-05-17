@@ -35,35 +35,40 @@ The Frontend module is the student-facing web application that provides an intui
 Frontend/
 ├── public/              # Static assets
 ├── src/
-│   ├── assets/          # Images and static files
+│   ├── assets/          # Images, icons, and static files
 │   ├── components/      # Reusable UI components
-│   │   ├── DashboardLayout.jsx
-│   │   ├── Features.jsx
-│   │   ├── HeroSection.jsx
-│   │   ├── Navbar.jsx
-│   │   └── Sidebar.jsx
-│   ├── context/         # React Context providers
-│   │   └── AuthContext.jsx
-│   ├── Pages/           # Page components
-│   │   ├── AboutPage.jsx
-│   │   ├── ContactPage.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── HomePage.jsx
-│   │   ├── LoginPage.jsx
-│   │   ├── MyTestsPage.jsx
-│   │   ├── ProfilePage.jsx
-│   │   ├── ReportsPage.jsx
-│   │   ├── SignupPage.jsx
-│   │   ├── StartTestPage.jsx
-│   │   ├── TestPage.jsx
-│   │   └── TestReportPage.jsx
+│   │   ├── DashboardLayout.jsx  # Dashboard layout wrapper
+│   │   ├── Features.jsx         # Platform features section
+│   │   ├── HeroSection.jsx      # Landing page hero
+│   │   ├── Navbar.jsx           # Navigation bar
+│   │   └── Sidebar.jsx          # Dashboard sidebar
+│   ├── context/         # React Context for state management
+│   │   └── AuthContext.jsx      # User authentication context
+│   ├── Pages/           # Page components (capital P)
+│   │   ├── AboutPage.jsx        # About page
+│   │   ├── ContactPage.jsx      # Contact page
+│   │   ├── Dashboard.jsx        # User dashboard
+│   │   ├── HomePage.jsx         # Landing page
+│   │   ├── Learning.jsx         # Learning resources page
+│   │   ├── LoginPage.jsx        # User login
+│   │   ├── MyTestsPage.jsx      # User's tests list
+│   │   ├── ProfilePage.jsx      # User profile
+│   │   ├── ReportsPage.jsx      # Test reports & analytics
+│   │   ├── SignupPage.jsx       # User registration
+│   │   ├── StartTestPage.jsx    # Test selection
+│   │   ├── TestPage.jsx         # Active test interface
+│   │   └── TestReportPage.jsx   # Individual test report
 │   ├── App.jsx          # Main application component
 │   ├── main.jsx         # Application entry point
-│   └── index.css        # Global styles
-├── .env                 # Environment variables
+│   ├── App.css          # App-specific styles
+│   ├── index.css        # Global styles
+│   └── style.css        # Additional styles
+├── .env                 # Environment variables (not in git)
+├── .gitignore           # Git ignore rules
 ├── package.json         # Dependencies and scripts
 ├── tailwind.config.js   # Tailwind CSS configuration
-└── vite.config.js       # Vite configuration
+├── vite.config.js       # Vite configuration
+└── README.md            # Frontend documentation
 ```
 
 ---
@@ -96,35 +101,58 @@ cd Frontend
 # Install dependencies
 npm install
 
-# Create .env file
-# Add the following:
-# VITE_BACKEND_URL=http://localhost:5000
+# Create .env file with:
+VITE_BACKEND_URL=http://localhost:8080
 
 # Start development server
 npm run dev
+# Frontend will be available at http://localhost:5173
 ```
 
 ### Available Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start development server |
+| `npm run start` | Start development server (alias for `npm run dev`) |
+| `npm run dev` | Start Vite development server on port 5173 |
 | `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint to check code quality |
+
+## 🔐 Environment Variables
+
+| Variable | Description | Example |
+|----------|-------------|--------|
+| `VITE_BACKEND_URL` | Backend API base URL | `http://localhost:8080` |
+
+## 🛡️ Authentication
+
+The frontend uses JWT-based authentication:
+1. Users register/login via the API
+2. JWT token is stored in localStorage
+3. Token is automatically sent with each API request
+4. Protected routes redirect unauthenticated users to login
+5. User context provides auth state across the application
 
 ---
 
 ## 🔗 Routes
 
-| Route | Component | Description | Auth |
-|-------|-----------|-------------|------|
-| `/` | HomePage | Landing page | No |
-| `/login` | LoginPage | User login | No |
-| `/signup` | SignupPage | User registration | No |
+| Route | Component | Description | Auth Required |
+|-------|-----------|-------------|---|
+| `/` | HomePage | Landing page with features | No |
+| `/login` | LoginPage | User login form | No |
+| `/signup` | SignupPage | User registration form | No |
 | `/about` | AboutPage | About the platform | No |
-| `/contact` | ContactPage | Contact information | No |
-| `/dashboard` | Dashboard | User dashboard | Yes |
+| `/contact` | ContactPage | Contact information page | No |
+| `/learning` | Learning | Learning resources & guides | No |
+| `/dashboard` | Dashboard | User dashboard with stats | Yes |
+| `/my-tests` | MyTestsPage | List of available tests | Yes |
+| `/start-test` | StartTestPage | Select and start a test | Yes |
+| `/test/:testId` | TestPage | Active test taking interface | Yes |
+| `/test-report/:testId` | TestReportPage | Individual test report | Yes |
+| `/reports` | ReportsPage | All test reports & analytics | Yes |
+| `/profile` | ProfilePage | User profile & settings | Yes |
 | `/my-tests` | MyTestsPage | View available tests | Yes |
 | `/reports` | ReportsPage | Performance reports | Yes |
 | `/profile` | ProfilePage | User profile | Yes |

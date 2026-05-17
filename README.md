@@ -55,11 +55,11 @@ GATE-UGCNET-Practice-Platform/
 └── README.md          # This file
 ```
 
-| Directory | Description | Tech Stack |
-|-----------|-------------|------------|
-| [Frontend](./Frontend/) | Student-facing practice platform | React 19, Tailwind CSS, Vite |
-| [Admin](./Admin/) | Administrator control panel | React 19, Tailwind CSS, Vite |
-| [Backend](./Backend/) | RESTful API server | Node.js, Express 5, MongoDB |
+| Directory | Description | Tech Stack | Default Port |
+|-----------|-------------|------------|---------------|
+| [Frontend](./Frontend/) | Student-facing practice platform | React 19, Tailwind CSS, Vite | 5173 |
+| [Admin](./Admin/) | Administrator control panel | React 19, Tailwind CSS, Vite | 5174 |
+| [Backend](./Backend/) | RESTful API server | Node.js, Express 5, MongoDB | 8080 |
 
 ---
 
@@ -88,6 +88,81 @@ GATE-UGCNET-Practice-Platform/
 ---
 
 ## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- MongoDB (local or cloud instance like MongoDB Atlas)
+
+### Installation & Setup
+
+#### 1. Backend Setup
+
+```bash
+# Navigate to Backend directory
+cd Backend
+
+# Install dependencies
+npm install
+
+# Create .env file with the following variables:
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/gate-ugcnet
+# PORT=8080
+# JWT_SECRET=your_super_secret_jwt_key
+# ADMIN_EMAIL=admin@example.com
+# ADMIN_PASSWORD=your_admin_password
+
+# Start the backend server
+npm start
+# Server will run on http://localhost:8080
+```
+
+#### 2. Frontend Setup
+
+```bash
+# Navigate to Frontend directory
+cd Frontend
+
+# Install dependencies
+npm install
+
+# Create .env file:
+# VITE_BACKEND_URL=http://localhost:8080
+
+# Start development server
+npm run dev
+# Frontend will run on http://localhost:5173
+```
+
+#### 3. Admin Panel Setup
+
+```bash
+# Navigate to Admin directory
+cd Admin
+
+# Install dependencies
+npm install
+
+# Create .env file:
+# VITE_BACKEND_URL=http://localhost:8080
+
+# Start development server
+npm run dev
+# Admin panel will run on http://localhost:5174
+```
+
+### Running All Services Together
+
+```bash
+# Terminal 1 - Backend
+cd Backend && npm start
+
+# Terminal 2 - Frontend
+cd Frontend && npm run dev
+
+# Terminal 3 - Admin Panel
+cd Admin && npm run dev
+```
 
 ### Prerequisites
 - Node.js (v18 or higher)

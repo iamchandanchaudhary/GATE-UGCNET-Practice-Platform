@@ -35,25 +35,29 @@ The Admin Panel is a secure, React-based dashboard for administrators to manage 
 Admin/
 ├── public/              # Static assets
 ├── src/
-│   ├── assets/          # Images and static files
+│   ├── assets/          # Images, icons, and static files
 │   ├── components/      # Reusable UI components
-│   │   ├── Navbar.jsx
-│   │   └── PageMenu.jsx
-│   ├── context/         # React Context providers
-│   │   └── AdminAuthContext.jsx
-│   ├── pages/           # Page components
-│   │   ├── AddTestPage.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── LoginPage.jsx
-│   │   ├── RegisteredUsersPage.jsx
-│   │   └── TestListPage.jsx
+│   │   ├── Navbar.jsx        # Admin navigation bar
+│   │   └── PageMenu.jsx      # Page menu/sidebar
+│   ├── context/         # React Context for state management
+│   │   └── AdminAuthContext.jsx  # Admin authentication context
+│   ├── pages/           # Page components (lowercase)
+│   │   ├── AddTestPage.jsx          # Create new test
+│   │   ├── Dashboard.jsx            # Admin dashboard
+│   │   ├── LoginPage.jsx            # Admin login
+│   │   ├── RegisteredUsersPage.jsx  # View all users
+│   │   └── TestListPage.jsx         # View all tests
 │   ├── App.jsx          # Main application component
 │   ├── main.jsx         # Application entry point
-│   └── index.css        # Global styles
-├── .env                 # Environment variables
+│   ├── App.css          # App-specific styles
+│   ├── index.css        # Global styles
+│   └── style.css        # Additional styles
+├── .env                 # Environment variables (not in git)
+├── .gitignore           # Git ignore rules
 ├── package.json         # Dependencies and scripts
 ├── tailwind.config.js   # Tailwind CSS configuration
-└── vite.config.js       # Vite configuration
+├── vite.config.js       # Vite configuration
+└── README.md            # Admin panel documentation
 ```
 
 ---
@@ -86,34 +90,35 @@ cd Admin
 # Install dependencies
 npm install
 
-# Create .env file
-# Add the following:
-# VITE_BACKEND_URL=http://localhost:5000
+# Create .env file with:
+VITE_BACKEND_URL=http://localhost:8080
 
 # Start development server
 npm run dev
+# Admin panel will be available at http://localhost:5174
 ```
 
 ### Available Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start development server |
+| `npm run dev` | Start Vite development server on port 5174 |
 | `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint to check code quality |
+| `npm run start` | Alias for `npm run dev` |
 
 ---
 
 ## 🔗 Routes
 
-| Route | Component | Description | Auth |
-|-------|-----------|-------------|------|
-| `/login` | LoginPage | Admin login | No |
-| `/dashboard` | Dashboard | Admin dashboard | Yes |
-| `/add-test` | AddTestPage | Create new test | Yes |
-| `/test-list` | TestListPage | View all tests | Yes |
-| `/users` | RegisteredUsersPage | View all users | Yes |
+| Route | Component | Description | Auth Required |
+|-------|-----------|-------------|---|
+| `/login` | LoginPage | Admin login form | No |
+| `/dashboard` | Dashboard | Admin dashboard with statistics | Yes |
+| `/add-test` | AddTestPage | Create new test with questions | Yes |
+| `/test-list` | TestListPage | View all tests (edit/delete) | Yes |
+| `/users` | RegisteredUsersPage | View all registered users | Yes |
 
 ---
 
@@ -121,17 +126,52 @@ npm run dev
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `VITE_BACKEND_URL` | Backend API URL | `http://localhost:5000` |
+| `VITE_BACKEND_URL` | Backend API base URL | `http://localhost:8080` |
 
 ---
 
 ## 🛡️ Authentication
 
 The admin panel uses JWT-based authentication:
-1. Admin credentials are verified against the backend
+1. Admin credentials are verified against the backend via `/api/admin/login`
 2. JWT token is stored in localStorage
-3. Token is sent with each API request
-4. Protected routes redirect to login if not authenticated
+3. Token is automatically sent with each API request in Authorization header
+4. Protected routes redirect unauthenticated admins to login page
+5. Admin context provides authentication state across the application
+
+---
+
+## 📊 Features Overview
+
+### Dashboard
+- View platform statistics (total tests, users, attempts)
+- Quick navigation to other admin features
+- Real-time data updates
+
+### Test Management
+- **Create Tests**: Add new tests with multiple questions
+- **Question Management**: Support for multiple choice questions
+- **Edit Tests**: Modify existing tests
+- **Delete Tests**: Remove tests from the platform
+- **View Test List**: Browse all created tests with details
+
+### User Management
+- View all registered users
+- Track user statistics
+- Monitor user activity
+
+---
+
+## 🔗 API Integration
+
+The admin panel communicates with these backend endpoints:
+- `POST /api/admin/login` - Admin authentication
+- `GET /api/admin/verify` - Token verification
+- `POST /api/tests/create` - Create new test
+- `GET /api/tests/all` - Fetch all tests
+- `PUT /api/tests/update/:id` - Update test
+- `DELETE /api/tests/delete/:id` - Delete test
+- `GET /api/users` - Fetch all users
 
 ---
 
